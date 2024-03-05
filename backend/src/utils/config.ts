@@ -7,7 +7,10 @@ const PORT = process.env.PORT;
 
 const SECRET = process.env.SECRET;
 
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
+
 export default {
   PORT,
-  SECRET
+  SECRET,
+  TMDB_API_KEY
 };
