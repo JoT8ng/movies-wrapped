@@ -12,4 +12,13 @@ tmdbRouter.get('/movies', async (_request, response, next) => {
     }
 });
 
+tmdbRouter.get('/tv', async (_request, response, next) => {
+    try {
+        const trendingShows = await tmdbService.getTrendingShows();
+        response.json(trendingShows);
+    } catch (exception) {
+        next (exception);
+    }
+});
+
 export default tmdbRouter;
