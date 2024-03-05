@@ -18,7 +18,7 @@
     "tsc": "tsc",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
     "lint": "eslint --ext .ts .",
-    "start": "cross-env NODE_ENV=production node build/src/index.js"
+    "start": "cross-env NODE_ENV=production node build/index.js"
   },
   "dependencies": {
     "@types/cors": "^2.8.17",
