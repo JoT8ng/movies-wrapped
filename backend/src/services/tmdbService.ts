@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '../utils/config';
 import { TrendingResultsMovie, TrendingResultsTV, TVResult, MovieResult } from '../types/trending';
 import { Search } from '../types/search';
-import { MovieDetails } from '../types/details';
+import { MovieDetails, TVDetails } from '../types/details';
 
 const getTrendingMovies = async (): Promise<TrendingResultsMovie> => {
     const response = await axios.get(
@@ -39,10 +39,18 @@ const movieDetails = async (idQuery: string): Promise<MovieDetails> => {
     return response.data as MovieDetails;
 };
 
+const showDetails = async (idQuery: string): Promise<TVDetails> => {
+    const response = await axios.get(
+        `https://api.themoviedb.org/3/tv/${idQuery}?language=en-US&api_key=${config.TMDB_API_KEY}`
+    );
+    return response.data as TVDetails;
+};
+
 export default {
     getTrendingMovies,
     getTrendingShows,
     searchMovies,
     searchShows,
-    movieDetails
+    movieDetails,
+    showDetails
 };
