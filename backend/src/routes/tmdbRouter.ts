@@ -32,4 +32,14 @@ tmdbRouter.get('/search/movies', async (_request, response, next) => {
     }
 });
 
+tmdbRouter.get('/search/tv', async (_request, response, next) => {
+    try {
+        const searchQuery = parseQuery(_request.query.query);
+        const searchShows = await tmdbService.searchShows(searchQuery);
+        response.json(searchShows);
+    } catch (exception) {
+        next (exception);
+    }
+});
+
 export default tmdbRouter;
