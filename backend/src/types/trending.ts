@@ -1,4 +1,4 @@
-interface TrendingResultMovie {
+export interface Movie {
     adult: boolean;
     backdrop_path: string;
     id: number;
@@ -16,7 +16,7 @@ interface TrendingResultMovie {
     vote_count: number;
 }
 
-interface TrendingResultTV {
+export interface TV {
     adult: boolean;
     backdrop_path: string;
     id: number;
@@ -36,14 +36,14 @@ interface TrendingResultTV {
 
 export interface TrendingResultsMovie {
     page: number;
-    results: TrendingResultMovie[];
+    results: Movie[];
     total_pages: number;
     total_results: number;
 }
 
 export interface TrendingResultsTV {
     page: number;
-    results: TrendingResultTV[];
+    results: TV[];
     total_pages: number;
     total_results: number;
 }

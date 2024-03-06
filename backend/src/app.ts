@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.static('dist'));
 app.use(middleware.requestLogger);
 
-app.use('/trending', tmdbRouter);
+app.use('/tmdb', tmdbRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
