@@ -1,7 +1,8 @@
 import axios from 'axios';
 import config from '../utils/config';
-import { TrendingResultsMovie, TrendingResultsTV, Movie, TV } from '../types/trending';
+import { TrendingResultsMovie, TrendingResultsTV, TVResult, MovieResult } from '../types/trending';
 import { Search } from '../types/search';
+import { MovieDetails } from '../types/details';
 
 const getTrendingMovies = async (): Promise<TrendingResultsMovie> => {
     const response = await axios.get(
@@ -17,23 +18,31 @@ const getTrendingShows = async (): Promise<TrendingResultsTV> => {
     return response.data as TrendingResultsTV;
 };
 
-const searchMovies = async (searchQuery: string ): Promise<Search<Movie>> => {
+const searchMovies = async (searchQuery: string ): Promise<Search<MovieResult>> => {
     const response = await axios.get(
         `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=true&language=en-US&page=1&api_key=${config.TMDB_API_KEY}`
     );
-    return response.data as Search<Movie>;
+    return response.data as Search<MovieResult>;
 };
 
-const searchShows = async (searchQuery: string ): Promise<Search<TV>> => {
+const searchShows = async (searchQuery: string ): Promise<Search<TVResult>> => {
     const response = await axios.get(
         `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=true&language=en-US&page=1&api_key=${config.TMDB_API_KEY}`
     );
-    return response.data as Search<TV>;
+    return response.data as Search<TVResult>;
+};
+
+const movieDetails = async (idQuery: string): Promise<MovieDetails> => {
+    const response = await axios.get(
+        `https://api.themoviedb.org/3/movie/${idQuery}?language=en-US&api_key=${config.TMDB_API_KEY}`
+    );
+    return response.data as MovieDetails;
 };
 
 export default {
     getTrendingMovies,
     getTrendingShows,
     searchMovies,
-    searchShows
+    searchShows,
+    movieDetails
 };
