@@ -12,7 +12,18 @@ const addEntry = (entry: WatchlistType): WatchlistType => {
     return entry;
 };
 
+const deleteEntry = (id: number): WatchlistType[] => {
+    const index = watchList.findIndex(entry => entry.id === id);
+
+    if (index !== -1) {
+        watchList.splice(index, 1);
+    }
+
+    return watchList;
+};
+
 export default {
     getWatchlist,
-    addEntry
+    addEntry,
+    deleteEntry
 };

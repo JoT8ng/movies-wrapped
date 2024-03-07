@@ -22,4 +22,13 @@ watchlistRouter.post('/add', (_request, response, next) => {
     }
 });
 
+watchlistRouter.delete('/:id', (_request, response, next) => {
+    try {
+        const id = Number(_request.params.id);
+        response.send(watchlistService.deleteEntry(id));
+    } catch (exception) {
+        next (exception);
+    }
+});
+
 export default watchlistRouter;
