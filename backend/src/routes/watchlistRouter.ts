@@ -4,9 +4,10 @@ import { toNewEntry } from '../utils/toNewEntry';
 
 const watchlistRouter = express.Router();
 
-watchlistRouter.get('/', (_request, response, next) => {
+watchlistRouter.get('/', async (_request, response, next) => {
     try {
-        response.send(watchlistService.getWatchlist());
+        const watchlist = await watchlistService.getWatchlist();
+        response.status(200).json(watchlist);
     } catch (exception) {
         next (exception);
     }
@@ -16,7 +17,7 @@ watchlistRouter.post('/add', (_request, response, next) => {
     try {
         const entry = toNewEntry(_request.body);
         const addedEntry = watchlistService.addEntry(entry);
-        response.json(addedEntry);
+        response.status(200).json(addedEntry);
     } catch (exception) {
         next (exception);
     }

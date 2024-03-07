@@ -2,10 +2,25 @@ import express from 'express';
 import { Application } from 'express';
 require('express-async-errors');
 const app: Application = express();
+import config from './utils/config';
+import logger from './utils/logger';
 import cors from 'cors';
 import tmdbRouter from './routes/tmdbRouter';
 import watchlistRouter from './routes/watchlistRouter';
 import middleware from './utils/middleware';
+import mongoose from 'mongoose';
+
+mongoose.set('strictQuery', false);
+
+logger.info('connecting to', config.MONGODB_URI);
+
+mongoose.connect(config.MONGODB_URI as string)
+  .then(() => {
+    logger.info('connected to MongoDB');
+  })
+  .catch((error) => {
+    logger.error('error connecting to MongoDB:', error.message);
+  });
 
 app.use(express.json());
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
