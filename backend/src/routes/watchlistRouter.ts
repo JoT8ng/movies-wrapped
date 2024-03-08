@@ -1,6 +1,6 @@
 import express from 'express';
 import watchlistService from '../services/watchlistService';
-import { toNewEntry } from '../utils/toNewEntry';
+import { parseQuery, toNewEntry } from '../utils/toNewEntry';
 
 const watchlistRouter = express.Router();
 
@@ -23,10 +23,10 @@ watchlistRouter.post('/add', (_request, response, next) => {
     }
 });
 
-watchlistRouter.delete('/:id', (_request, response, next) => {
+watchlistRouter.delete('/delete', (_request, response, next) => {
     try {
-        const id = Number(_request.params.id);
-        response.send(watchlistService.deleteEntry(id));
+        const id = parseQuery(_request.body.id);
+        response.status(200).send(watchlistService.deleteEntry(id));
     } catch (exception) {
         next (exception);
     }

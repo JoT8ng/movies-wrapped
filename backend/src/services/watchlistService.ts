@@ -1,8 +1,5 @@
 import { WatchlistMongo, WatchlistType } from "../types/watchList";
 import Watchlist from '../models/watchlist';
-import watchData from "../test-data/watchData";
-
-const watchList: WatchlistType[] = watchData;
 
 const getWatchlist = async (): Promise<WatchlistType[]> => {
     const list = await Watchlist.find();
@@ -28,14 +25,11 @@ const addEntry = async (entry: WatchlistType): Promise<WatchlistMongo> => {
     return addedEntry;
 };
 
-const deleteEntry = (id: number): WatchlistType[] => {
-    const index = watchList.findIndex(entry => entry.id === id);
+const deleteEntry = async (id: string): Promise<WatchlistMongo | null> => {
+    const entryDelete = await Watchlist.findById(id);
+    await Watchlist.findByIdAndDelete(id);
 
-    if (index !== -1) {
-        watchList.splice(index, 1);
-    }
-
-    return watchList;
+    return entryDelete;
 };
 
 export default {
