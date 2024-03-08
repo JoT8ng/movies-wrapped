@@ -1,6 +1,6 @@
 import express from 'express';
 import watchlistService from '../services/watchlistService';
-import { parseQuery, toNewEntry } from '../utils/toNewEntry';
+import { parseQuery, toNewEntry, toUpdateEntry } from '../utils/toNewEntry';
 
 const watchlistRouter = express.Router();
 
@@ -13,9 +13,9 @@ watchlistRouter.get('/', async (_request, response, next) => {
     }
 });
 
-watchlistRouter.post('/add', (_request, response, next) => {
+watchlistRouter.post('/add', (request, response, next) => {
     try {
-        const entry = toNewEntry(_request.body);
+        const entry = toNewEntry(request.body);
         const addedEntry = watchlistService.addEntry(entry);
         response.status(200).json(addedEntry);
     } catch (exception) {
@@ -23,10 +23,20 @@ watchlistRouter.post('/add', (_request, response, next) => {
     }
 });
 
-watchlistRouter.delete('/delete', (_request, response, next) => {
+watchlistRouter.delete('/delete', (request, response, next) => {
     try {
-        const id = parseQuery(_request.body.id);
+        const id = parseQuery(request.body.id);
         response.status(200).send(watchlistService.deleteEntry(id));
+    } catch (exception) {
+        next (exception);
+    }
+});
+
+watchlistRouter.put('/update', (request, response, next) => {
+    try {
+        const id = parseQuery(request.body.id);
+        const entry = toUpdateEntry(request.body);
+        response.status(200).send(watchlistService.updateEntry(id, entry));
     } catch (exception) {
         next (exception);
     }

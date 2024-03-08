@@ -1,5 +1,5 @@
 import { Genre } from "../types/details";
-import { WatchlistType } from "../types/watchList";
+import { UpdateEntry, WatchlistType } from "../types/watchList";
 
 const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
@@ -15,21 +15,42 @@ const isDate = (date: string): boolean => {
 
 export const parseQuery = (query: unknown): string => {
     if(!query || !isString(query)){
-        throw new Error('Incorrect ot missing query');
+        throw new Error('Incorrect or missing query');
     }
     return query;
 };
 
 export const parseIDQuery = (query: unknown): number => {
     if(!query || !isNumber(query) ){
-        throw new Error('Incorrect ot missing query');
+        throw new Error('Incorrect or missing query');
     }
     return query;
 };
 
 const parseDate = (date: unknown): string => {
     if(!date || !isString(date) || !isDate){
-        throw new Error('Incorrect ot missing date');
+        throw new Error('Incorrect or missing date');
+    }
+    return date;
+};
+
+const parseUpdateNumber = (query: unknown): number => {
+    if(!isNumber(query) ){
+        throw new Error('Incorrect input is not number');
+    }
+    return query;
+};
+
+const parseUpdateString = (query: unknown): string => {
+    if(!isString(query)){
+        throw new Error('Incorrect input is not string');
+    }
+    return query;
+};
+
+const parseUpdateDate = (date: unknown): string => {
+    if(!isString(date) || !isDate){
+        throw new Error('Incorrect or missing date');
     }
     return date;
 };
@@ -67,12 +88,29 @@ export const toNewEntry = (entry: any): WatchlistType => {
             id: parseIDQuery(entry.id),
             media_type: parseQuery(entry.media_type),
             title: parseQuery(entry.title),
-            user_rating: parseIDQuery(entry.user_rating),
-            comments: parseQuery(entry.comments),
-            date_watched: parseDate(entry.date_watched),
+            user_rating: parseUpdateNumber(entry.user_rating),
+            comments: parseUpdateString(entry.comments),
+            date_watched: parseUpdateDate(entry.date_watched),
             release_date: parseDate(entry.release_date),
             genres: parseGenre(entry.genres),
             poster_path: parseQuery(entry.poster_path)
+        };
+        return newEntry;
+    }
+    throw new Error('Incorrect data: some fields are missing');
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const toUpdateEntry = (entry: any): UpdateEntry => {
+    if (!entry || typeof entry !== 'object') {
+        throw new Error('Incorrect or missing data');
+    }
+
+    if (entry) {
+        const newEntry: UpdateEntry = {
+            user_rating: parseUpdateNumber(entry.user_rating),
+            comments: parseUpdateString(entry.comments),
+            date_watched: parseUpdateString(entry.date_watched)
         };
         return newEntry;
     }

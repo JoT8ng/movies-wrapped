@@ -24,3 +24,9 @@ export interface WatchlistMongo extends Document {
     genres: Genre[];
     poster_path: string;
 }
+
+export interface UpdateEntry {
+    user_rating: number;
+    comments: string;
+    date_watched: string;
+}
