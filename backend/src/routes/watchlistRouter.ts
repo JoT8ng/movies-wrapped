@@ -13,30 +13,32 @@ watchlistRouter.get('/', async (_request, response, next) => {
     }
 });
 
-watchlistRouter.post('/add', (request, response, next) => {
+watchlistRouter.post('/add', async (request, response, next) => {
     try {
         const entry = toNewEntry(request.body);
-        const addedEntry = watchlistService.addEntry(entry);
+        const addedEntry = await watchlistService.addEntry(entry);
         response.status(200).json(addedEntry);
     } catch (exception) {
         next (exception);
     }
 });
 
-watchlistRouter.delete('/delete', (request, response, next) => {
+watchlistRouter.delete('/delete', async (request, response, next) => {
     try {
         const id = parseQuery(request.body.id);
-        response.status(200).send(watchlistService.deleteEntry(id));
+        await watchlistService.deleteEntry(id);
+        response.status(200).end();
     } catch (exception) {
         next (exception);
     }
 });
 
-watchlistRouter.put('/update', (request, response, next) => {
+watchlistRouter.put('/update', async (request, response, next) => {
     try {
         const id = parseQuery(request.body.id);
         const entry = toUpdateEntry(request.body);
-        response.status(200).send(watchlistService.updateEntry(id, entry));
+        await watchlistService.updateEntry(id, entry);
+        response.status(200).end();
     } catch (exception) {
         next (exception);
     }

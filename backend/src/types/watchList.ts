@@ -1,5 +1,5 @@
 import { Genre } from "./details";
-import { Document } from "mongoose";
+import mongoose,{ Document } from "mongoose";
 
 export interface WatchlistType {
     id: number;
@@ -23,6 +23,7 @@ export interface WatchlistMongo extends Document {
     release_date: string;
     genres: Genre[];
     poster_path: string;
+    user: mongoose.Schema.Types.ObjectId;
 }
 
 export interface UpdateEntry {

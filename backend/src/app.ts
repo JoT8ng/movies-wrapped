@@ -7,6 +7,7 @@ import logger from './utils/logger';
 import cors from 'cors';
 import tmdbRouter from './routes/tmdbRouter';
 import watchlistRouter from './routes/watchlistRouter';
+import userRouter from './routes/userRouter';
 import middleware from './utils/middleware';
 import mongoose from 'mongoose';
 
@@ -30,6 +31,8 @@ app.use(middleware.requestLogger);
 
 app.use('/tmdb', tmdbRouter);
 app.use('/', watchlistRouter);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+app.use('/users', userRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
