@@ -3,7 +3,8 @@ import Watchlist from '../models/watchlist';
 import { UpdateQuery } from "mongoose";
 
 const getWatchlist = async (): Promise<WatchlistType[]> => {
-    const list = await Watchlist.find();
+    const list = await Watchlist
+        .find({}).populate('user', { username: 1});
     return list;
 };
 
