@@ -10,5 +10,4 @@ export interface UserMongo extends Document {
 export interface UserType {
     username: string;
     passwordHash: string;
-    watchlist: mongoose.Schema.Types.ObjectId[];
 }

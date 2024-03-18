@@ -31,8 +31,12 @@ watchlistRouter.post('/add', async (request, response, next) => {
 
 watchlistRouter.delete('/delete', async (request, response, next) => {
     try {
+        const tokenid: string | Response<unknown, Record<string, unknown>> = middleware.tokenValidator(request, response);
+        if (tokenid instanceof Response) {
+            return tokenid;
+        }
         const id = parseQuery(request.body.id);
-        await watchlistService.deleteEntry(id);
+        await watchlistService.deleteEntry(id, tokenid as string);
         response.status(200).end();
     } catch (exception) {
         next (exception);
@@ -41,9 +45,13 @@ watchlistRouter.delete('/delete', async (request, response, next) => {
 
 watchlistRouter.put('/update', async (request, response, next) => {
     try {
+        const tokenid: string | Response<unknown, Record<string, unknown>> = middleware.tokenValidator(request, response);
+        if (tokenid instanceof Response) {
+            return tokenid;
+        }
         const id = parseQuery(request.body.id);
         const entry = toUpdateEntry(request.body);
-        await watchlistService.updateEntry(id, entry);
+        await watchlistService.updateEntry(id, entry, tokenid as string);
         response.status(200).end();
     } catch (exception) {
         next (exception);

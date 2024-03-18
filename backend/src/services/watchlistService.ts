@@ -47,18 +47,43 @@ const addEntry = async (entry: WatchlistType, tokenid: string): Promise<Watchlis
     return addedEntry;
 };
 
-const deleteEntry = async (id: string): Promise<WatchlistMongo | null> => {
-    const entryDelete = await Watchlist.findById(id);
+const deleteEntry = async (id: string, tokenid: string): Promise<WatchlistMongo | null> => {
+    const user: UserMongo | null = await User.findById(tokenid);
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const entryDelete: WatchlistMongo | null = await Watchlist.findById(id);
+
+    if (!entryDelete) {
+        throw new Error('watchlist entry not found');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    if (entryDelete.user.toString() !== user._id.toString()) {
+        throw new Error('only users to wrote watchlist entry can delete entry');
+    }
+
     await Watchlist.findByIdAndDelete(id);
 
     return entryDelete;
 };
 
-const updateEntry = async (id: string, entry: UpdateEntry): Promise<WatchlistMongo | null> => {
+const updateEntry = async (id: string, entry: UpdateEntry, tokenid: string): Promise<WatchlistMongo | null> => {
+    const user: UserMongo | null = await User.findById(tokenid);
+    if (!user) {
+        throw new Error('User not found');
+    }
+
     const entryToUpdate: WatchlistMongo | null = await Watchlist.findById(id);
     
     if (!entryToUpdate) {
         throw new Error('Entry not found');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    if (entryToUpdate.user.toString() !== user._id.toString()) {
+        throw new Error('only users to wrote watchlist entry can update entry');
     }
 
     if (!entry.user_rating || !entry.comments || !entry.date_watched) {

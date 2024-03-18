@@ -4,12 +4,7 @@ import { UserMongo, UserType } from '../types/user';
 
 const getUser = async (): Promise<UserType[]> => {
     const user = await User
-        .find({}).populate('watchlist', {
-            media_type: 1,
-            title: 1,
-            user_rating: 1,
-            comments: 1,
-            date_watched: 1});
+        .find({}).populate('watchlist', {title: 1,});
     return user;
 };
 
