@@ -1,6 +1,8 @@
 import { UpdateEntry, WatchlistMongo, WatchlistType } from "../types/watchList";
 import Watchlist from '../models/watchlist';
 import { UpdateQuery } from "mongoose";
+import User from '../models/user';
+import { UserMongo } from "../types/user";
 
 const getWatchlist = async (): Promise<WatchlistType[]> => {
     const list = await Watchlist
@@ -8,7 +10,7 @@ const getWatchlist = async (): Promise<WatchlistType[]> => {
     return list;
 };
 
-const addEntry = async (entry: WatchlistType): Promise<WatchlistMongo> => {
+const addEntry = async (entry: WatchlistType, tokenid: string): Promise<WatchlistMongo> => {
     const newEntry: WatchlistType = entry;
 
     const date = new Date();
@@ -16,6 +18,11 @@ const addEntry = async (entry: WatchlistType): Promise<WatchlistMongo> => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
+
+    const user: UserMongo | null = await User.findById(tokenid);
+    if (!user) {
+        throw new Error('User not found');
+    }
 
     if (!newEntry.user_rating || !newEntry.comments || !newEntry.date_watched) {
         newEntry.user_rating = 0;
@@ -32,7 +39,8 @@ const addEntry = async (entry: WatchlistType): Promise<WatchlistMongo> => {
         date_watched: newEntry.date_watched,
         release_date: newEntry.release_date,
         genres: newEntry.genres,
-        poster_path: newEntry.poster_path
+        poster_path: newEntry.poster_path,
+        user: user._id
     });
     
     await addedEntry.save();
