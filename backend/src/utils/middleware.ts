@@ -2,6 +2,7 @@ import logger from './logger';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../utils/config';
+import Blacklist from '../models/blacklist';
 
 interface JwtPayload {
   id: string
@@ -45,13 +46,17 @@ const getTokenFrom = (request: Request): string | null => {
   return null;
 };
 
-const tokenValidator = (request: Request, response: Response): string | Response => {
+const tokenValidator = async (request: Request, response: Response): Promise<string | Response> => {
   const token = getTokenFrom(request);
   if (!token) {
       return response.status(401).json({ error: 'token missing' });
   }
   if (!config.SECRET) {
     throw new Error('JWT secret is not defined in the configuration');
+  }
+  const checkIfBlacklisted = await Blacklist.findOne({ token: token });
+  if (checkIfBlacklisted) {
+    return response.status(401).json({ error: 'token expired or invalid' });
   }
   const decodedToken = jwt.verify(token, config.SECRET) as JwtPayload;
   if (!decodedToken.id) {

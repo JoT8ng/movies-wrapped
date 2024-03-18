@@ -11,6 +11,7 @@ import userRouter from './routes/userRouter';
 import middleware from './utils/middleware';
 import mongoose from 'mongoose';
 import loginRouter from './routes/loginRouter';
+import logoutRouter from './routes/logoutRouter';
 
 mongoose.set('strictQuery', false);
 
@@ -35,6 +36,7 @@ app.use('/', watchlistRouter);
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 app.use('/users', userRouter);
 app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
