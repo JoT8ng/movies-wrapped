@@ -17,6 +17,9 @@ export default {
       'base-green': '#002323',
       'light-green': '#E2EBC1',
       'pink': '#EF5657',
+      'dark-green': '#001212',
+      'gray': '#686868',
+      'green': '#005D5E',
     },
     fontFamily: {
       'sans': ['ui-sans-serif', 'system-ui', 'Roboto'],
