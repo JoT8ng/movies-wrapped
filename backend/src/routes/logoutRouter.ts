@@ -1,6 +1,5 @@
 import express from 'express';
 import middleware from '../utils/middleware';
-import { Response } from 'express';
 import { BlacklistMongo } from '../types/blacklist';
 import blacklist from '../models/blacklist';
 
@@ -13,9 +12,9 @@ logoutRouter.post('/', async (request, response, next) => {
             throw new Error('Token not found');
         }
 
-        const tokenid: Promise<string | Response> = middleware.tokenValidator(request, response);
-        if (tokenid instanceof Response) {
-            return tokenid;
+        const checkIfBlacklisted: string | null = await blacklist.findOne({ token: token });
+        if (checkIfBlacklisted) {
+            return response.status(401).json({ error: 'token expired or invalid' });
         }
 
         const addedToken: BlacklistMongo = new blacklist({

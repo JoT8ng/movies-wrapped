@@ -15,9 +15,19 @@ watchlistRouter.get('/', async (_request, response, next) => {
     }
 });
 
-watchlistRouter.post('/add', async (request, response, next) => {
+/* watchlistRouter.get('/watchlist', async (request, response, next) => {
     try {
-        const tokenid: string | Response<unknown, Record<string, unknown>> = middleware.tokenValidator(request, response);
+        const userid = parseQuery(request.body.id);
+        const watchlist = await watchlistService.getWatchlistUser(userid);
+        response.status(200).json(watchlist);
+    } catch (exception) {
+        next (exception);
+    }
+}); */
+
+watchlistRouter.post('/add', middleware.checkBlacklist, async (request, response, next) => {
+    try {
+        const tokenid: string | Response = middleware.tokenValidator(request, response);
         if (tokenid instanceof Response) {
             return tokenid;
         }
@@ -29,9 +39,9 @@ watchlistRouter.post('/add', async (request, response, next) => {
     }
 });
 
-watchlistRouter.delete('/delete', async (request, response, next) => {
+watchlistRouter.delete('/delete', middleware.checkBlacklist, async (request, response, next) => {
     try {
-        const tokenid: string | Response<unknown, Record<string, unknown>> = middleware.tokenValidator(request, response);
+        const tokenid: string | Response = middleware.tokenValidator(request, response);
         if (tokenid instanceof Response) {
             return tokenid;
         }
@@ -43,9 +53,9 @@ watchlistRouter.delete('/delete', async (request, response, next) => {
     }
 });
 
-watchlistRouter.put('/update', async (request, response, next) => {
+watchlistRouter.put('/update', middleware.checkBlacklist, async (request, response, next) => {
     try {
-        const tokenid: string | Response<unknown, Record<string, unknown>> = middleware.tokenValidator(request, response);
+        const tokenid: string | Response = middleware.tokenValidator(request, response);
         if (tokenid instanceof Response) {
             return tokenid;
         }
