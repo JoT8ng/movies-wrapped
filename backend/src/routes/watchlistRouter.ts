@@ -3,6 +3,7 @@ import watchlistService from '../services/watchlistService';
 import { parseQuery, toNewEntry, toUpdateEntry } from '../utils/toNewEntry';
 import middleware from '../utils/middleware';
 import { Response } from 'express';
+import { WatchlistType } from '../types/watchList';
 
 const watchlistRouter = express.Router();
 
@@ -15,15 +16,19 @@ watchlistRouter.get('/', async (_request, response, next) => {
     }
 });
 
-/* watchlistRouter.get('/watchlist', async (request, response, next) => {
+watchlistRouter.get('/watchlist', middleware.checkBlacklist, async (request, response, next) => {
     try {
-        const userid = parseQuery(request.body.id);
-        const watchlist = await watchlistService.getWatchlistUser(userid);
+        const tokenid: string | Response = middleware.tokenValidator(request, response);
+        if (tokenid instanceof Response) {
+            return tokenid;
+        }
+        const userid = parseQuery(request.body.user);
+        const watchlist: WatchlistType[] | null = await watchlistService.getWatchlistUser(userid);
         response.status(200).json(watchlist);
     } catch (exception) {
         next (exception);
     }
-}); */
+});
 
 watchlistRouter.post('/add', middleware.checkBlacklist, async (request, response, next) => {
     try {

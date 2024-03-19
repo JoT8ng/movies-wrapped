@@ -10,11 +10,10 @@ const getWatchlist = async (): Promise<WatchlistType[]> => {
     return list;
 };
 
-/* const getWatchlistUser = async (userid: string): Promise<WatchlistType[]> => {
-    const list = await Watchlist
-        .find({}).populate('user', { username: 1});
+const getWatchlistUser = async (userid: string): Promise<WatchlistType[] | null> => {
+    const list: WatchlistType[] | null = await Watchlist.find({ user: userid });
     return list;
-}; */
+};
 
 const addEntry = async (entry: WatchlistType, tokenid: string): Promise<WatchlistMongo> => {
     const newEntry: WatchlistType = entry;
@@ -118,5 +117,6 @@ export default {
     getWatchlist,
     addEntry,
     deleteEntry,
-    updateEntry
+    updateEntry,
+    getWatchlistUser
 };
