@@ -5,8 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    animation: {
+      'spin-slow': 'spin 3s linear infinite',
+    },
     screens: {
-      sm: '480px',
+      sm: '390px',
       md: '768px',
       lg: '976px',
       xl: '1440px',
