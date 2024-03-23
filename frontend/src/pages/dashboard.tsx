@@ -22,7 +22,7 @@ const Dashboard = () => {
 
     return (
         <div className="flex bg-dark-green py-10 p-3 gap-3 min-h-screen">
-            <div className="flex flex-col p-5 justify-between rounded bg-base-green w-80">
+            <div className="flex flex-col p-5 justify-between rounded bg-base-green w-1/5">
                 <div className='flex flex-col gap-3'>
                     <div className='flex flex-col gap-8'>
                         <a href='/'>
@@ -48,7 +48,7 @@ const Dashboard = () => {
                     Log out
                 </button>
             </div>
-            <div className='flex flex-col gap-3 bg-dark-green flex-grow'>
+            <div className='flex flex-col gap-3 bg-dark-green w-4/5'>
                 <div className='flex flex-col rounded bg-base-green p-5'>
                     <button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink py-2 w-full rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
                         Add Movie/Show
@@ -64,8 +64,8 @@ const Dashboard = () => {
                     <div className='flex overflow-x-auto scroll-smooth hide-scrollbar'>
                         {trendingMoviesData.results.map((item =>
                             <div key={`Trending ${item.original_title}`} className='flex-shrink-0 mr-4'>
-                                <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='w-[150px] shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out rounded' />
-                                <p className='font-sans text-sm text-light-green text-center'>{item.original_title}</p>
+                                <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
+                                <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.original_title}</p>
                             </div>
                         ))}
                     </div>
