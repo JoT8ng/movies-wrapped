@@ -5,6 +5,7 @@ import tmdbService from '../services/tmdbService'
 
 const Dashboard = () => {
     const [trendingMoviesData, setTrendingMoviesData] = useState<TrendingResultsMovie>({ page: 0, results: [], total_pages: 0, total_results: 0 })
+    const [trending, setTrending] = useState<boolean>(true)
 
     const trendingMovies = async (): Promise<void> => {
         try {
@@ -19,6 +20,11 @@ const Dashboard = () => {
         // On dashboard load get trending movies from TMDB API
         trendingMovies()
     }, [])
+
+    const trendingToggle = (value: boolean) => {
+        setTrending(value)
+        console.log('trending toggle:', value)
+    }
 
     return (
         <div className="flex bg-dark-green py-10 p-3 gap-3 min-h-screen">
@@ -58,8 +64,16 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className='flex flex-col rounded bg-base-green p-5'>
-                    <div className='flex gap-8'>
-                        <h1 className='font-sans lg:text-lg pb-3 md:text-sm sm:text-xs text-light-green'>Trending</h1>
+                    <div className='flex justify-start gap-9 pb-5'>
+                        <h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green'>Trending</h1>
+                        <div className='flex w-64 rounded-full border border-pink'>
+                            <div className='w-1/2'>
+                                <button onClick={() => trendingToggle(true)} className={`${trending ? 'bg-pink' : ''} transition-colors duration-300 font-sans text-light-green rounded-full w-full py-2 text-xs`}>Movies</button>
+                            </div>
+                            <div className='w-1/2'>
+                                <button onClick={() => trendingToggle(false)} className={`${!trending ? 'bg-pink' : ''} transition-colors duration-300 font-sans text-light-green rounded-full w-full py-2 text-xs`}>TV</button>
+                            </div>
+                        </div>
                     </div>
                     <div className='flex overflow-x-auto scroll-smooth hide-scrollbar'>
                         {trendingMoviesData.results.map((item =>
