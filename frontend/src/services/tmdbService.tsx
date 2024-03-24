@@ -1,6 +1,6 @@
 import axios from 'axios'
 import config from '../utils/config'
-import { TrendingResultsMovie } from '../types/trending'
+import { TrendingResultsMovie, TrendingResultsTV } from '../types/trending'
 
 const getTrendingMovies = () => {
     const request = axios.get<TrendingResultsMovie>(`${config.BACKEND_URL}/tmdb/trending/movies`)
@@ -10,8 +10,17 @@ const getTrendingMovies = () => {
 	})
 }
 
+const getTrendingTV = () => {
+    const request = axios.get<TrendingResultsTV>(`${config.BACKEND_URL}/tmdb/trending/tv`)
+    return request.then(response => {
+		console.log('received trending tv data from backend')
+		return response.data
+	})
+}
+
 const tmdbService = {
-    getTrendingMovies
+    getTrendingMovies,
+    getTrendingTV
 }
 
 export default tmdbService

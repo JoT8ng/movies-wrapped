@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import logo from '../assets/MoviesWrapped_Logo-Solid.png'
-import { TrendingResultsMovie } from '../types/trending'
+import { TrendingResultsMovie, TrendingResultsTV } from '../types/trending'
 import tmdbService from '../services/tmdbService'
 
 const Dashboard = () => {
     const [trendingMoviesData, setTrendingMoviesData] = useState<TrendingResultsMovie>({ page: 0, results: [], total_pages: 0, total_results: 0 })
+    const [trendingTvData, setTrendingTvData] = useState<TrendingResultsTV>({ page: 0, results: [], total_pages: 0, total_results: 0 })
     const [trending, setTrending] = useState<boolean>(true)
 
     const trendingMovies = async (): Promise<void> => {
@@ -16,9 +17,19 @@ const Dashboard = () => {
         }
     }
 
+    const trendingTV = async (): Promise<void> => {
+        try {
+            const data = await tmdbService.getTrendingTV()
+            setTrendingTvData(data)
+        } catch (error) {
+            console.error('Error getting trending TV from TMDB API:', error)
+        }
+    }
+
     useEffect(() => {
-        // On dashboard load get trending movies from TMDB API
+        // On dashboard load get trending movies and shows from TMDB API
         trendingMovies()
+        trendingTV()
     }, [])
 
     const trendingToggle = (value: boolean) => {
@@ -76,12 +87,21 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <div className='flex overflow-x-auto scroll-smooth hide-scrollbar'>
-                        {trendingMoviesData.results.map((item =>
-                            <div key={`Trending ${item.original_title}`} className='flex-shrink-0 mr-4'>
-                                <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
-                                <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.original_title}</p>
-                            </div>
-                        ))}
+                        {trending ? 
+                            (trendingMoviesData.results.map(item =>
+                                <div key={`Trending ${item.original_title}`} className='flex-shrink-0 mr-4'>
+                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
+                                    <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.original_title}</p>
+                                </div>
+                            ))
+                            :
+                            (trendingTvData.results.map(item =>
+                                <div key={`Trending ${item.original_name}`} className='flex-shrink-0 mr-4'>
+                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_name}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
+                                    <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.original_name}</p>
+                                </div>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
