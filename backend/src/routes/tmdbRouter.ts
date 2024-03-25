@@ -22,9 +22,9 @@ tmdbRouter.get('/trending/tv', async (_request, response, next) => {
     }
 });
 
-tmdbRouter.get('/search/movies', async (_request, response, next) => {
+tmdbRouter.post('/search/movies', async (_request, response, next) => {
     try {
-        const searchQuery = parseQuery(_request.query.query);
+        const searchQuery = parseQuery(_request.body.query);
         const searchMovies = await tmdbService.searchMovies(searchQuery);
         response.json(searchMovies);
     } catch (exception) {
@@ -32,7 +32,7 @@ tmdbRouter.get('/search/movies', async (_request, response, next) => {
     }
 });
 
-tmdbRouter.get('/search/tv', async (_request, response, next) => {
+tmdbRouter.post('/search/tv', async (_request, response, next) => {
     try {
         const searchQuery = parseQuery(_request.query.query);
         const searchShows = await tmdbService.searchShows(searchQuery);

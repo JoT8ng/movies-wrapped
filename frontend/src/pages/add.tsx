@@ -1,7 +1,11 @@
 import { Formik, Form } from "formik"
 import * as Yup from "yup"
 import logo from '../assets/MoviesWrapped_Logo-Solid.png'
-import TextInput from "../components/TextInput";
+import TextInput from "../components/TextInput"
+import { useState } from "react"
+import { Search } from "../types/search"
+import { MovieResult } from "../types/trending"
+import tmdbService from '../services/tmdbService'
 
 const addSchema = Yup.object().shape({
     user_rating: Yup.number()
@@ -18,12 +22,42 @@ const searchSchema = Yup.object().shape({
         .required('Search query is required')
 });
 
+interface QueryData {
+    query: string;
+    buttonClicked?: string;
+}
+
 const Add = () => {
+    const [searchMovie, setSearchMovie] = useState<Search<MovieResult>>({ page: 0, results: [], total_pages: 0, total_results: 0 })
+
     const date = new Date();
 
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
+
+    const searchMovies = async (query: string): Promise<void> => {
+        try {
+            const data = await tmdbService.getSearchMovies({ query: query })
+            setSearchMovie(data)
+        } catch (error) {
+            console.error('Error searching movies from TMDB API:', error)
+        }
+    }
+
+    const handleFormSubmit = async (values: QueryData, setSubmitting: (isSubmitting: boolean) => void) => {
+        try {
+          if (values.buttonClicked === 'searchMovies') {
+            searchMovies(values.query);
+          } else if (values.buttonClicked === 'searchTV') {
+            alert(JSON.stringify(values))
+          }
+        } catch (error) {
+          console.error('Error submitting form:', error);
+        } finally {
+          setSubmitting(false);
+        }
+      };
 
     return (
         <div className="bg-base-green min-h-screen">
@@ -37,28 +71,49 @@ const Add = () => {
                 <Formik
                         validationSchema={searchSchema}
                         initialValues={{ query: "" }}
-                        onSubmit={(values) => {
-                            alert(JSON.stringify(values));
-                        }}
+                        onSubmit={(values, { setSubmitting }) => handleFormSubmit(values, setSubmitting)}
                 >
-                    <Form>
-                        <TextInput
-                            label='Search'
-                            name='query'
-                            type='text'
-                            placeholder='Search query'
-                            width='lg:w-[900px] md:w-96 sm:w-48'
-                        />
-                        <div className="flex md:flex-row gap-8 sm:flex-col justify-center items-center py-3">
-                            <button type="submit" className="border border-pink bg-base-green hover:bg-pink sm:w-48 w-32 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
-                                Search Movies
-                            </button>
-                            <button type="submit" className="border border-pink bg-base-green hover:bg-pink sm:w-48 w-32 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
-                                Search TV
-                            </button>
-                        </div>
-                    </Form>
+                    {({ handleSubmit, setFieldValue }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <TextInput
+                                label='Search'
+                                name='query'
+                                type='text'
+                                placeholder='Search query'
+                                width='lg:w-[900px] md:w-96 sm:w-48'
+                            />
+                            <div className="flex md:flex-row gap-8 sm:flex-col justify-center items-center py-3">
+                                <button type="submit" onClick={() => setFieldValue('buttonClicked', 'searchMovies')} className="border border-pink bg-base-green hover:bg-pink sm:w-48 w-32 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+                                    Search Movies
+                                </button>
+                                <button type="submit" onClick={() => setFieldValue('buttonClicked', 'searchTV')} className="border border-pink bg-base-green hover:bg-pink sm:w-48 w-32 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+                                    Search TV
+                                </button>
+                            </div>
+                        </Form>
+                    )}
                 </Formik>
+                <div className="flex flex-col border rounded border-light-green p-5 lg:w-[900px] md:w-96 sm:w-48 h-96 overflow-y-auto scroll-smooth hide-scrollbar">
+                    {searchMovie?
+                        (searchMovie.results.map(item =>
+                            <div className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
+                                <div className="flex flex-col justify-start">
+                                    <p className="font-mono text-light-green text-sm px-2">{item.original_title}</p>
+                                    <p className="font-mono text-light-green text-sm px-2">{item.release_date}</p>
+                                </div>
+                                <button className="font-mono text-pink text-sm p-2">
+                                    Select
+                                </button>
+                            </div>
+                        ))
+                        :
+                        <div className="flex justify-center">
+                            <p className="font-mono text-light-green text-sm p-2">
+                                No search results found
+                            </p>
+                        </div>
+                    }
+                </div>
                 <Formik
                     validationSchema={addSchema}
                     initialValues={{ user_rating: "1", comments: "", date_watched: `${year}-${month}-${day}` }}
