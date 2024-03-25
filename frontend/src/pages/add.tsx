@@ -3,7 +3,7 @@ import * as Yup from "yup"
 import logo from '../assets/MoviesWrapped_Logo-Solid.png'
 import TextInput from "../components/TextInput"
 import { useState } from "react"
-import { Search } from "../types/search"
+import { Search, SearchTVResult } from "../types/search"
 import { MovieResult } from "../types/trending"
 import tmdbService from '../services/tmdbService'
 
@@ -14,7 +14,7 @@ const addSchema = Yup.object().shape({
     comments: Yup.string()
         .max(100, "Comments must be no more than 100 characters"),
     date_watched: Yup.string()
-        .matches(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in the format DD-MM-YYYY')
+        .matches(/^(?:(?:19|20)\d{2})-(?:(?:0?[1-9])|(?:1[0-2]))-(?:(?:0?[1-9]|[12][0-9]|3[01]))$/, 'Date must be in the format DD-MM-YYYY')
 });
 
 const searchSchema = Yup.object().shape({
@@ -29,6 +29,7 @@ interface QueryData {
 
 const Add = () => {
     const [searchMovie, setSearchMovie] = useState<Search<MovieResult>>({ page: 0, results: [], total_pages: 0, total_results: 0 })
+    const [searchTV, setSearchTV] = useState<Search<SearchTVResult>>({ page: 0, results: [], total_pages: 0, total_results: 0 })
 
     const date = new Date();
 
@@ -45,19 +46,28 @@ const Add = () => {
         }
     }
 
+    const searchShows = async (query: string): Promise<void> => {
+        try {
+            const data = await tmdbService.getSearchShows({ query: query })
+            setSearchTV(data)
+        } catch (error) {
+            console.error('Error searching TV shows from TMDB API:', error)
+        }
+    }
+
     const handleFormSubmit = async (values: QueryData, setSubmitting: (isSubmitting: boolean) => void) => {
         try {
           if (values.buttonClicked === 'searchMovies') {
-            searchMovies(values.query);
+            searchMovies(values.query)
           } else if (values.buttonClicked === 'searchTV') {
-            alert(JSON.stringify(values))
+            searchShows(values.query)
           }
         } catch (error) {
-          console.error('Error submitting form:', error);
+          console.error('Error submitting form:', error)
         } finally {
-          setSubmitting(false);
+          setSubmitting(false)
         }
-      };
+      }
 
     return (
         <div className="bg-base-green min-h-screen">
@@ -96,8 +106,29 @@ const Add = () => {
                 <div className="flex flex-col border rounded border-light-green p-5 lg:w-[900px] md:w-96 sm:w-48 h-96 overflow-y-auto scroll-smooth hide-scrollbar">
                     {searchMovie?
                         (searchMovie.results.map(item =>
-                            <div className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
+                            <div key={`Search ${item.original_title}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
                                 <div className="flex flex-col justify-start">
+                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='px-2 py-2 w-[100px] rounded' />
+                                    <p className="font-mono text-light-green text-sm px-2">{item.original_title}</p>
+                                    <p className="font-mono text-light-green text-sm px-2">{item.release_date}</p>
+                                </div>
+                                <button className="font-mono text-pink text-sm p-2">
+                                    Select
+                                </button>
+                            </div>
+                        ))
+                        :
+                        <div className="flex justify-center">
+                            <p className="font-mono text-light-green text-sm p-2">
+                                No search results found
+                            </p>
+                        </div>
+                    }
+                    {searchTV?
+                        (searchTV.results.map(item =>
+                            <div key={`Search ${item.original_title}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
+                                <div className="flex flex-col justify-start">
+                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='px-2 py-2 w-[100px] rounded' />
                                     <p className="font-mono text-light-green text-sm px-2">{item.original_title}</p>
                                     <p className="font-mono text-light-green text-sm px-2">{item.release_date}</p>
                                 </div>
