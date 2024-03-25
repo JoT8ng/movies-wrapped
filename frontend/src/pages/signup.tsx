@@ -35,15 +35,17 @@ const Signup = () => {
                             name='username'
                             type='text'
                             placeholder='username'
+                            width='md:w-80 sm:w-48'
                         />
                         <TextInput
                             label='Password'
                             name='password'
                             type='text'
                             placeholder='password'
+                            width='md:w-80 sm:w-48'
                         />
                         <div className="flex gap-3 justify-center items-center pt-10 p-5">
-                            <button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink w-80 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+                            <button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink sm:w-48 md:w-80 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
                                 Sign up
                             </button>
                         </div>
