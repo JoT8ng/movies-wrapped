@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Search, SearchTVResult } from "../types/search"
 import { MovieResult } from "../types/trending"
 import tmdbService from '../services/tmdbService'
+import { IoMdClose } from "react-icons/io"
 
 const addSchema = Yup.object().shape({
     user_rating: Yup.number()
@@ -71,9 +72,12 @@ const Add = () => {
 
     return (
         <div className="bg-base-green min-h-screen">
-            <div className='flex justify-start py-5 px-10 gap-8'>
+            <div className='flex justify-between py-5 px-10 gap-8'>
                 <a href='/'>
                     <img src={logo} alt='movies wrapped logo' className='object-contain max-h-10 max-w-15 transition duration-300 hover:filter hover:drop-shadow-lg' />
+                </a>
+                <a href="/dashboard">
+                    <IoMdClose className='w-6 h-6 text-light-green' />
                 </a>
             </div>
             <div className="flex flex-col justify-center items-center px-20">
@@ -144,6 +148,11 @@ const Add = () => {
                             </p>
                         </div>
                     }
+                </div>
+                <div className="flex md:flex-row gap-8 sm:flex-col justify-center items-center py-3">
+                    <a href="/manual" className="text-center border border-pink bg-base-green hover:bg-pink sm:w-48 md:w-64 py-2 px-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+                        Can't find what you're looking for? Enter manually
+                    </a>
                 </div>
                 <Formik
                     validationSchema={addSchema}
