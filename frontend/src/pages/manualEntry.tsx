@@ -52,6 +52,19 @@ const Manual = () => {
         { id: 37, name: 'Western' }
     ]
 
+    const handleCheckbox = (itemName: string, values: { genres: Genre[] }, setFieldValue: (field: string, value: unknown, shouldValidate?: boolean | undefined) => void) => {
+        const genresSet = new Set<Genre>(values.genres)
+        const genreToAdd = genresOptions.find((option: Genre) => option.name === itemName)
+        if (genreToAdd) {
+            if (genresSet.has(genreToAdd)) {
+                genresSet.delete(genreToAdd);
+            } else {
+                genresSet.add(genreToAdd);
+            }
+            setFieldValue('genres', [...genresSet]);
+        }
+    }
+
     return (
         <div className="bg-base-green min-h-screen">
             <div className='flex justify-between py-5 px-10 gap-8'>
@@ -95,18 +108,7 @@ const Manual = () => {
                                             value={item.name}
                                             id={`genre-${item.id}`}
                                             checked={values.genres.some((genre: Genre) => genre.name === item.name)}
-                                            onChange={() => {
-                                                const genresSet = new Set<Genre>(values.genres)
-                                                const genreToAdd = genresOptions.find(option => option.name === item.name)
-                                                if (genreToAdd) {
-                                                    if (genresSet.has(genreToAdd)) {
-                                                        genresSet.delete(genreToAdd);
-                                                    } else {
-                                                        genresSet.add(genreToAdd);
-                                                    }
-                                                    setFieldValue('genres', [...genresSet]);
-                                                }
-                                            }}
+                                            onChange={() => handleCheckbox(item.name, values, setFieldValue)}
                                         />
                                         <label htmlFor={`genre-${item.name}`} className="checkbox-input font-sans text-sm text-light-green text-start p-1">{item.name}</label>
                                     </div>
