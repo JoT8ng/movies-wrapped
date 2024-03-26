@@ -156,7 +156,7 @@ const Add = () => {
                 </div>
                 <Formik
                     validationSchema={addSchema}
-                    initialValues={{ user_rating: "1", comments: "", date_watched: `${year}-${month}-${day}` }}
+                    initialValues={{ user_rating: "0", comments: "No comments added", date_watched: `${year}-${month}-${day}` }}
                     onSubmit={(values) => {
                         alert(JSON.stringify(values));
                     }}
