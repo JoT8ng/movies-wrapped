@@ -1,7 +1,12 @@
 import { Formik, Form } from "formik"
 import * as Yup from "yup"
 import logo from '../assets/MoviesWrapped_Logo-Solid.png'
-import TextInput from "../components/TextInput";
+import TextInput from "../components/TextInput"
+import userService from "../services/userService"
+import { useAppDispatch } from "../hooks"
+import { loginSuccess } from "../reducers/AuthReducer"
+import { useNavigate } from "react-router-dom"
+
 
 const loginSchema = Yup.object().shape({
     username: Yup.string()
@@ -13,6 +18,27 @@ const loginSchema = Yup.object().shape({
 });
 
 const Login = () => {
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
+    const handleLogin = async (values: { username: string, password: string }): Promise<void> => {
+        try {
+            const data = await userService.loginService(values)
+
+            window.localStorage.setItem(
+                'loggedMovieappUser', JSON.stringify(data)
+            )
+
+            dispatch(loginSuccess({ token: data.token, username: data.username }))
+
+            console.log('Username and token successfully stored in Redux Store')
+
+            navigate('/dashboard')
+        } catch (error) {
+            console.error('Error logging in:', error)
+        }
+    }
+
     return (
         <div className="bg-base-green min-h-screen">
             <div className='flex justify-start py-5 px-10 gap-8'>
@@ -25,9 +51,7 @@ const Login = () => {
                 <Formik
                     validationSchema={loginSchema}
                     initialValues={{ username: "", password: "" }}
-                    onSubmit={(values) => {
-                        alert(JSON.stringify(values));
-                    }}
+                    onSubmit={(values) => {handleLogin(values)}}
                 >
                     <Form>
                         <TextInput
