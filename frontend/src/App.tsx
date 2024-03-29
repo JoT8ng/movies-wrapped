@@ -7,6 +7,7 @@ import Signup from './pages/signup'
 import Dashboard from './pages/dashboard'
 import Add from './pages/add'
 import Manual from './pages/manualEntry'
+import PrivateRoutes from './utils/PrivateRoutes'
 
 function App() {
 
@@ -16,9 +17,11 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/add' element={<Add />} />
-        <Route path='/manual' element={<Manual />} />
+        <Route element={<PrivateRoutes />}>
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/add' element={<Add />} />
+          <Route path='/manual' element={<Manual />} />
+        </Route>
         <Route path='/contact' element={<Contact />} />
       </Routes>
       <Footer />

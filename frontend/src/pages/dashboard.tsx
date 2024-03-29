@@ -1,8 +1,27 @@
+import { useNavigate } from 'react-router-dom'
 import logo from '../assets/MoviesWrapped_Logo-Solid.png'
 import Summary from '../components/summary'
 import Trending from '../components/trending'
+import { logout } from '../reducers/AuthReducer'
+import { useAppDispatch } from '../hooks'
 
 const Dashboard = () => {
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
+    const handleLogout = async (): Promise<void> => {
+        try {
+            window.localStorage.clear()
+
+            dispatch(logout())
+
+            console.log('User logged out successfully')
+
+            navigate('/')
+        } catch (error) {
+            console.error('Error logging in:', error)
+        }
+    }
 
     return (
         <div className="flex bg-dark-green py-10 p-3 gap-3 min-h-screen">
@@ -18,7 +37,7 @@ const Dashboard = () => {
                     </div>
                     <Summary />
                 </div>
-                <button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink w-full py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+                <button onClick={handleLogout} type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink w-full py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
                     Log out
                 </button>
             </div>
