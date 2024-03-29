@@ -1,7 +1,10 @@
 import { Formik, Form } from "formik"
 import * as Yup from "yup"
 import logo from '../assets/MoviesWrapped_Logo-Solid.png'
-import TextInput from "../components/TextInput";
+import TextInput from "../components/TextInput"
+import { useState } from "react"
+import Notification from "../components/Notification"
+import userService from "../services/userService"
 
 const loginSchema = Yup.object().shape({
     username: Yup.string()
@@ -13,6 +16,30 @@ const loginSchema = Yup.object().shape({
 });
 
 const Signup = () => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+	const [message, setMessage] = useState<boolean>(false)
+
+    const handleSignup = async (values: { username: string, password: string }): Promise<void> => {
+        try {
+            await userService.signupService(values)
+
+            console.log('User signed up successfully')
+
+            setErrorMessage('User signed up successfully! Log in to get started!')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(true)
+        } catch (error) {
+            console.error('Error logging in:', error)
+            setErrorMessage('Failed to sign in. Server error. Please try again in a few minutes')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(false)
+        }
+    }
+
     return (
         <div className="bg-base-green min-h-screen">
             <div className='flex justify-start py-5 px-10 gap-8'>
@@ -22,12 +49,11 @@ const Signup = () => {
             </div>
             <div className="flex flex-col justify-center items-center p-10">
                 <h1 className="font-sans lg:text-lg py-3 md:text-sm sm:text-xs text-light-green text-center">Sign up to start cataloging your favorite movies!</h1>
+                <Notification error={errorMessage} message={message} />
                 <Formik
                     validationSchema={loginSchema}
                     initialValues={{ username: "", password: "" }}
-                    onSubmit={(values) => {
-                        alert(JSON.stringify(values));
-                    }}
+                    onSubmit={(values) => {handleSignup(values)}}
                 >
                     <Form>
                         <TextInput

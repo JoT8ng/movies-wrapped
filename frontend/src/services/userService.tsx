@@ -18,9 +18,14 @@ const logoutService = (token: string) => {
     axios.post(`${config.BACKEND_URL}/logout`, null, header)
 }
 
+const signupService = (credentials: { username: string, password: string }) => {
+    axios.post<LoginType>(`${config.BACKEND_URL}/users`, credentials)
+}
+
 const userService = {
     loginService,
-    logoutService
+    logoutService,
+    signupService
 }
 
 export default userService

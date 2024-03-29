@@ -6,7 +6,7 @@ interface NotificationProps {
 const Notification: React.FC<NotificationProps> = ({ error, message }) => {
 	let errorStyle = {
 		color: 'green',
-		fontSize: 20,
+		fontSize: 12,
 		padding: 10,
 		marginBottom: 10,
 	}
