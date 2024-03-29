@@ -6,6 +6,8 @@ import userService from "../services/userService"
 import { useAppDispatch } from "../hooks"
 import { loginSuccess } from "../reducers/AuthReducer"
 import { useNavigate } from "react-router-dom"
+import Notification from "../components/Notification"
+import { useState } from "react"
 
 
 const loginSchema = Yup.object().shape({
@@ -18,6 +20,9 @@ const loginSchema = Yup.object().shape({
 });
 
 const Login = () => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+	const [message, setMessage] = useState<boolean>(false)
+    
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -36,6 +41,11 @@ const Login = () => {
             navigate('/dashboard')
         } catch (error) {
             console.error('Error logging in:', error)
+            setErrorMessage('Failed to log in. Server error or incorrect username or password.')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(false)
         }
     }
 
@@ -48,6 +58,7 @@ const Login = () => {
             </div>
             <div className="flex flex-col justify-center items-center p-10">
                 <h1 className="font-sans lg:text-lg py-3 md:text-sm sm:text-xs text-light-green text-center">Log in to Movies Wrapped</h1>
+                <Notification error={errorMessage} message={message} />
                 <Formik
                     validationSchema={loginSchema}
                     initialValues={{ username: "", password: "" }}
