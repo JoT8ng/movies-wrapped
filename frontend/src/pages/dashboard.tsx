@@ -3,14 +3,19 @@ import logo from '../assets/MoviesWrapped_Logo-Solid.png'
 import Summary from '../components/summary'
 import Trending from '../components/trending'
 import { logout } from '../reducers/AuthReducer'
-import { useAppDispatch } from '../hooks'
+import { useAppDispatch, useAppSelector } from '../hooks'
+import userService from "../services/userService"
 
 const Dashboard = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
+    const token = useAppSelector(state => state.auth.token)
+
     const handleLogout = async (): Promise<void> => {
         try {
+            await userService.logoutService(token as string)
+
             window.localStorage.clear()
 
             dispatch(logout())
@@ -37,7 +42,7 @@ const Dashboard = () => {
                     </div>
                     <Summary />
                 </div>
-                <button onClick={handleLogout} type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink w-full py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+                <button onClick={handleLogout} className="bg-pink hover:bg-base-green hover:border hover:border-pink w-full py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
                     Log out
                 </button>
             </div>

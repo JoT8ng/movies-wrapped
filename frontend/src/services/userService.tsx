@@ -10,8 +10,17 @@ const loginService = (credentials: { username: string, password: string }): Prom
 	})
 }
 
+const logoutService = (token: string) => {
+    const header = {
+        headers: { Authorization: `Bearer ${token}` },
+    }
+
+    axios.post(`${config.BACKEND_URL}/logout`, null, header)
+}
+
 const userService = {
-    loginService
+    loginService,
+    logoutService
 }
 
 export default userService
