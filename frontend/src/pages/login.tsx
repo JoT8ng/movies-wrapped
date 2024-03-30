@@ -34,7 +34,7 @@ const Login = () => {
                 'loggedMovieappUser', JSON.stringify(data)
             )
 
-            dispatch(loginSuccess({ token: data.token, username: data.username }))
+            dispatch(loginSuccess({ token: data.token, username: data.username, userid: data.user_id }))
 
             console.log('Username and token successfully stored in Redux Store')
 

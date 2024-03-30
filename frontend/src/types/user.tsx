@@ -6,4 +6,5 @@ export interface UserType {
 export interface LoginType {
     username: string;
     token: string;
+    user_id: string;
 }

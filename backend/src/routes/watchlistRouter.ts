@@ -16,7 +16,7 @@ watchlistRouter.get('/', async (_request, response, next) => {
     }
 });
 
-watchlistRouter.get('/watchlist', middleware.checkBlacklist, async (request, response, next) => {
+watchlistRouter.post('/watchlist', middleware.checkBlacklist, async (request, response, next) => {
     try {
         const tokenid: string | Response = middleware.tokenValidator(request, response);
         if (tokenid instanceof Response) {
