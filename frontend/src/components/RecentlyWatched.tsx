@@ -15,8 +15,25 @@ const RecentlyWatched = () => {
 
     const navigate = useNavigate()
 
-    const token = useAppSelector(state => state.auth.token)
-    const userID = useAppSelector(state => state.auth.userId)
+    const tokenFromLocalStorage = localStorage.getItem('loggedMovieappUser');
+    let token: string | null = null
+    let userID: string | null = null
+
+    try {
+    const tokenData = JSON.parse(tokenFromLocalStorage as string)
+    token = tokenData?.token
+    userID = tokenData?.user_id
+    } catch (error) {
+    console.error('Error parsing token from local storage:', error)
+    }
+
+    const reduxToken = useAppSelector(state => state.auth.token)
+    const reduxUser = useAppSelector(state => state.auth.userId)
+
+    if (!token) {
+        token = reduxToken
+        userID = reduxUser
+    }
 
     const userWatchlist = async (): Promise<void> => {
         try {
@@ -26,6 +43,7 @@ const RecentlyWatched = () => {
             console.error('Error getting watchlist:', error)
             if (error.response && error.response.status === 401) {
                 window.alert('Your session has expired. Please log in again.')
+                window.localStorage.clear()
                 navigate('/login')
             }
             setErrorMessage('Server error. Failed to retrieve user data. Please logout and try again later.')

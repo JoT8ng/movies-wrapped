@@ -20,11 +20,11 @@ export const authSlice = createSlice ({
             state.token = action.payload.token
             state.username = action.payload.username
             state.userId = action.payload.userid
+            console.log(JSON.parse(JSON.stringify(state)))
         },
         logout(state) {
-            state.token = null;
-            state.username = null;
-            state.userId = null;
+            console.log(JSON.parse(JSON.stringify(state)))
+            return initialState
         },
     },
 })
