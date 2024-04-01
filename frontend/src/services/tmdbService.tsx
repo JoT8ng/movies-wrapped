@@ -2,6 +2,7 @@ import axios from 'axios'
 import config from '../utils/config'
 import { MovieResult, TrendingResultsMovie, TrendingResultsTV, TVResult } from '../types/trending'
 import { Search } from '../types/search'
+import { MovieDetails, TVDetails } from '../types/details';
 
 interface QueryData {
   query: string;
@@ -36,14 +37,32 @@ const getSearchShows = (queryData: QueryData): Promise<Search<TVResult>> => {
   return request.then(response => {
     console.log('received search TV shows data from backend')
     return response.data
-})
+  })
+}
+
+const getMovieDetails = (id: QueryData): Promise<MovieDetails> => {
+  const request = axios.post<MovieDetails>(`${config.BACKEND_URL}/tmdb/movies`, id)
+  return request.then(response => {
+    console.log('received selected movie details from backend')
+    return response.data
+  })
+}
+
+const getTVDetails = (id: QueryData): Promise<TVDetails> => {
+  const request = axios.post<TVDetails>(`${config.BACKEND_URL}/tmdb/tv`, id)
+  return request.then(response => {
+    console.log('received selected movie details from backend')
+    return response.data
+  })
 }
 
 const tmdbService = {
     getTrendingMovies,
     getTrendingTV,
     getSearchMovies,
-    getSearchShows
+    getSearchShows,
+    getMovieDetails,
+    getTVDetails
 }
 
 export default tmdbService

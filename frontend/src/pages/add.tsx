@@ -9,7 +9,6 @@ import tmdbService from '../services/tmdbService'
 import { IoMdClose } from "react-icons/io"
 import { WatchlistType } from "../types/watchlist"
 import { Genre } from "../types/details"
-import { useEffect } from "react"
 import watchlistService from "../services/watchlistService"
 import middleware from "../utils/middleware"
 import { useNavigate } from "react-router-dom"
@@ -79,28 +78,6 @@ const Add = () => {
     const month = date.getMonth() + 1
     const year = date.getFullYear()
 
-    const genresOptions: Genre[] = [
-        { id: 28, name: 'Action' },
-        { id: 12, name: 'Adventure' },
-        { id: 16, name: 'Animation' },
-        { id: 35, name: 'Comedy' },
-        { id: 80, name: 'Crime' },
-        { id: 99, name: 'Documentary' },
-        { id: 18, name: 'Drama' },
-        { id: 10751, name: 'Family' },
-        { id: 14, name: 'Fantasy' },
-        { id: 36, name: 'History' },
-        { id: 27, name: 'Horror' },
-        { id: 10402, name: 'Music' },
-        { id: 9648, name: 'Mystery' },
-        { id: 10749, name: 'Romance' },
-        { id: 878, name: 'Science Fiction' },
-        { id: 53, name: 'Thriller' },
-        { id: 10770, name: 'TV Movie' },
-        { id: 10752, name: 'War' },
-        { id: 37, name: 'Western' }
-    ]
-
     const searchMovies = async (query: string): Promise<void> => {
         try {
             const data = await tmdbService.getSearchMovies({ query: query })
@@ -133,38 +110,53 @@ const Add = () => {
         }
     }
 
-    const mapGenreIdsToNames = (genreIds: number[], genresOptions: Genre[]): Genre[] => {
-        return genreIds.map(id => {
-            const genre = genresOptions.find(genre => genre.id === id)
-            return genre ? genre : { id: id, name: "Unknown" }
-        })
-    }
+    const handleSelectMovie = async (data: SelectMovieData) => {
+        try {
+            const id = data.id.toString()
+            const details = await tmdbService.getMovieDetails({ query: id })
+            const genres = details.genres.map((genre) => ({
+                id: genre.id,
+                name: genre.name
+            }))
 
-    const handleSelectMovie = (data: SelectMovieData) => {
-        setSelectedMovieData(data)
-        if (selectedMovieData) {
-            setMovieGenres(mapGenreIdsToNames(selectedMovieData.genre_ids, genresOptions))
+            setSelectedMovieData(data)
+
+            setMovieGenres(genres)
             setSelectedTVData(null)
             setTVGenres([])
+        } catch (error) {
+            console.error('Error getting movie details:', error)
+            setErrorMessage('TMDB server error. The selection does not have valid data. Refine your search or choose another selection.')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(false)
         }
     }
 
-    const handleSelectTV = (data: SelectTVData) => {
-        setSelectedTVData(data)
-        if (selectedTVData) {
-            setTVGenres(mapGenreIdsToNames(selectedTVData.genre_ids, genresOptions))
+    const handleSelectTV = async (data: SelectTVData) => {
+        try {
+            const id = data.id.toString()
+            const details = await tmdbService.getTVDetails({ query: id })
+            const genres = details.genres.map((genre) => ({
+                id: genre.id,
+                name: genre.name
+            }))
+
+            setSelectedTVData(data)
+
+            setTVGenres(genres)
             setSelectedMovieData(null)
             setMovieGenres([])
+        } catch (error) {
+            console.error('Error getting tv details:', error)
+            setErrorMessage('TMDB server error. The selection does not have valid data. Refine your search or choose another selection.')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(false)
         }
     }
-
-    useEffect(() => {
-        console.log("Selected Movie Genres:", movieGenres);
-    }, [movieGenres])
-    
-    useEffect(() => {
-        console.log("Selected TV Genres:", tvGenres);
-    }, [tvGenres])
 
     const handleFormSubmit = async (values: AddData, selectedData: SelectMovieData | SelectTVData, genres: Genre[]) => {
         try {

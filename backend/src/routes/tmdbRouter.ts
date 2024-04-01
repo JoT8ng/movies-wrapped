@@ -42,9 +42,9 @@ tmdbRouter.post('/search/tv', async (request, response, next) => {
     }
 });
 
-tmdbRouter.get('/movies', async (_request, response, next) => {
+tmdbRouter.post('/movies', async (_request, response, next) => {
     try {
-        const idQuery = parseQuery(_request.query.query);
+        const idQuery = parseQuery(_request.body.query);
         const movie = await tmdbService.movieDetails(idQuery);
         response.json(movie);
     } catch (exception) {
@@ -52,9 +52,9 @@ tmdbRouter.get('/movies', async (_request, response, next) => {
     }
 });
 
-tmdbRouter.get('/tv', async (_request, response, next) => {
+tmdbRouter.post('/tv', async (_request, response, next) => {
     try {
-        const idQuery = parseQuery(_request.query.query);
+        const idQuery = parseQuery(_request.body.query);
         const show = await tmdbService.showDetails(idQuery);
         response.json(show);
     } catch (exception) {
