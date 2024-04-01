@@ -3,10 +3,17 @@ import * as Yup from "yup"
 import logo from '../assets/MoviesWrapped_Logo-Solid.png'
 import TextInput from "../components/TextInput"
 import { useState } from "react"
-import { Search, SearchTVResult } from "../types/search"
-import { MovieResult } from "../types/trending"
+import { Search } from "../types/search"
+import { MovieResult, TVResult } from "../types/trending"
 import tmdbService from '../services/tmdbService'
 import { IoMdClose } from "react-icons/io"
+import { WatchlistType } from "../types/watchlist"
+import { Genre } from "../types/details"
+import { useEffect } from "react"
+import watchlistService from "../services/watchlistService"
+import middleware from "../utils/middleware"
+import { useNavigate } from "react-router-dom"
+import Notification from "../components/Notification"
 
 const addSchema = Yup.object().shape({
     user_rating: Yup.number()
@@ -28,15 +35,71 @@ interface QueryData {
     buttonClicked?: string;
 }
 
+interface AddData {
+    user_rating: number;
+    comments: string;
+    date_watched: string;
+}
+
+interface SelectMovieData {
+    id: number;
+    media_type: string;
+    original_title: string;
+    release_date: string;
+    genre_ids: number[];
+    poster_path: string;
+}
+
+interface SelectTVData {
+    id: number;
+    media_type: string;
+    original_name: string;
+    first_air_date: string;
+    genre_ids: number[];
+    poster_path: string;
+}
+
 const Add = () => {
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+	const [message, setMessage] = useState<boolean>(false)
     const [searchMovie, setSearchMovie] = useState<Search<MovieResult>>({ page: 0, results: [], total_pages: 0, total_results: 0 })
-    const [searchTV, setSearchTV] = useState<Search<SearchTVResult>>({ page: 0, results: [], total_pages: 0, total_results: 0 })
+    const [searchTV, setSearchTV] = useState<Search<TVResult>>({ page: 0, results: [], total_pages: 0, total_results: 0 })
+    const [selectedMovieData, setSelectedMovieData] = useState<SelectMovieData | null>(null)
+    const [selectedTVData, setSelectedTVData] = useState<SelectTVData | null>(null)
+    const [movieGenres, setMovieGenres] = useState<Genre[]>([])
+    const [tvGenres, setTVGenres] = useState<Genre[]>([])
 
-    const date = new Date();
+    const navigate = useNavigate()
 
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
+    const token: string | null = middleware.getToken()
+
+    const date = new Date()
+
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+
+    const genresOptions: Genre[] = [
+        { id: 28, name: 'Action' },
+        { id: 12, name: 'Adventure' },
+        { id: 16, name: 'Animation' },
+        { id: 35, name: 'Comedy' },
+        { id: 80, name: 'Crime' },
+        { id: 99, name: 'Documentary' },
+        { id: 18, name: 'Drama' },
+        { id: 10751, name: 'Family' },
+        { id: 14, name: 'Fantasy' },
+        { id: 36, name: 'History' },
+        { id: 27, name: 'Horror' },
+        { id: 10402, name: 'Music' },
+        { id: 9648, name: 'Mystery' },
+        { id: 10749, name: 'Romance' },
+        { id: 878, name: 'Science Fiction' },
+        { id: 53, name: 'Thriller' },
+        { id: 10770, name: 'TV Movie' },
+        { id: 10752, name: 'War' },
+        { id: 37, name: 'Western' }
+    ]
 
     const searchMovies = async (query: string): Promise<void> => {
         try {
@@ -56,7 +119,7 @@ const Add = () => {
         }
     }
 
-    const handleFormSubmit = async (values: QueryData, setSubmitting: (isSubmitting: boolean) => void) => {
+    const handleSearchSubmit = async (values: QueryData, setSubmitting: (isSubmitting: boolean) => void) => {
         try {
           if (values.buttonClicked === 'searchMovies') {
             searchMovies(values.query)
@@ -64,11 +127,88 @@ const Add = () => {
             searchShows(values.query)
           }
         } catch (error) {
-          console.error('Error submitting form:', error)
+          console.error('Error submitting search form:', error)
         } finally {
           setSubmitting(false)
         }
-      }
+    }
+
+    const mapGenreIdsToNames = (genreIds: number[], genresOptions: Genre[]): Genre[] => {
+        return genreIds.map(id => {
+            const genre = genresOptions.find(genre => genre.id === id)
+            return genre ? genre : { id: id, name: "Unknown" }
+        })
+    }
+
+    const handleSelectMovie = (data: SelectMovieData) => {
+        setSelectedMovieData(data)
+        if (selectedMovieData) {
+            setMovieGenres(mapGenreIdsToNames(selectedMovieData.genre_ids, genresOptions))
+            setSelectedTVData(null)
+            setTVGenres([])
+        }
+    }
+
+    const handleSelectTV = (data: SelectTVData) => {
+        setSelectedTVData(data)
+        if (selectedTVData) {
+            setTVGenres(mapGenreIdsToNames(selectedTVData.genre_ids, genresOptions))
+            setSelectedMovieData(null)
+            setMovieGenres([])
+        }
+    }
+
+    useEffect(() => {
+        console.log("Selected Movie Genres:", movieGenres);
+    }, [movieGenres])
+    
+    useEffect(() => {
+        console.log("Selected TV Genres:", tvGenres);
+    }, [tvGenres])
+
+    const handleFormSubmit = async (values: AddData, selectedData: SelectMovieData | SelectTVData, genres: Genre[]) => {
+        try {
+            if (!selectedData) {
+                console.error('No selected data found.')
+                return
+            }
+
+            const { id, media_type, poster_path } = selectedData;
+            const title = 'original_title' in selectedData ? (selectedData as SelectMovieData).original_title : (selectedData as SelectTVData).original_name
+            const release_date = 'release_date' in selectedData ? (selectedData as SelectMovieData).release_date : (selectedData as SelectTVData).first_air_date
+
+            const dataSubmit: WatchlistType = {
+                id,
+                media_type,
+                title,
+                release_date,
+                genres,
+                poster_path,
+                user_rating: values.user_rating,
+                comments: values.comments,
+                date_watched: values.date_watched
+            }
+            console.log(dataSubmit)
+
+            await watchlistService.addWatchlist(token as string, dataSubmit)
+            setSelectedTVData(null)
+            setTVGenres([])
+            setSelectedMovieData(null)
+            setMovieGenres([])
+        } catch (error) {
+            console.error('Error submitting form:', error)
+            if (error.response && error.response.status === 401) {
+                window.alert('Your session has expired. Please log in again.')
+                window.localStorage.clear()
+                navigate('/login')
+            }
+            setErrorMessage('Server error or no selected data found. Failed to add data. Please logout and try again later.')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(false)
+        }
+    }
 
     return (
         <div className="bg-base-green min-h-screen">
@@ -82,10 +222,11 @@ const Add = () => {
             </div>
             <div className="flex flex-col justify-center items-center px-20">
                 <h1 className="font-sans lg:text-lg py-3 md:text-sm sm:text-xs text-light-green text-center">What did you watch today?</h1>
+                <Notification error={errorMessage} message={message} />
                 <Formik
                         validationSchema={searchSchema}
                         initialValues={{ query: "" }}
-                        onSubmit={(values, { setSubmitting }) => handleFormSubmit(values, setSubmitting)}
+                        onSubmit={(values, { setSubmitting }) => handleSearchSubmit(values, setSubmitting)}
                 >
                     {({ handleSubmit, setFieldValue }) => (
                         <Form onSubmit={handleSubmit}>
@@ -110,13 +251,13 @@ const Add = () => {
                 <div className="flex flex-col border rounded border-light-green p-5 lg:w-[900px] md:w-96 sm:w-48 h-96 overflow-y-auto scroll-smooth hide-scrollbar">
                     {searchMovie?
                         (searchMovie.results.map(item =>
-                            <div key={`Search ${item.original_title}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
+                            <div key={`Search ${item.original_title}, ${item.release_date}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
                                 <div className="flex flex-col justify-start">
                                     <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='px-2 py-2 w-[100px] rounded' />
                                     <p className="font-mono text-light-green text-sm px-2">{item.original_title}</p>
                                     <p className="font-mono text-light-green text-sm px-2">{item.release_date}</p>
                                 </div>
-                                <button className="font-mono text-pink text-sm p-2">
+                                <button onClick={() => handleSelectMovie({id: item.id, media_type: 'movie', original_title: item.original_title, release_date: item.release_date, genre_ids: item.genre_ids, poster_path: item.poster_path})} className="font-mono text-pink text-sm p-2">
                                     Select
                                 </button>
                             </div>
@@ -130,13 +271,13 @@ const Add = () => {
                     }
                     {searchTV?
                         (searchTV.results.map(item =>
-                            <div key={`Search ${item.original_title}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
+                            <div key={`Search ${item.original_name}, ${item.first_air_date}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
                                 <div className="flex flex-col justify-start">
-                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='px-2 py-2 w-[100px] rounded' />
-                                    <p className="font-mono text-light-green text-sm px-2">{item.original_title}</p>
-                                    <p className="font-mono text-light-green text-sm px-2">{item.release_date}</p>
+                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_name}`} className='px-2 py-2 w-[100px] rounded' />
+                                    <p className="font-mono text-light-green text-sm px-2">{item.original_name}</p>
+                                    <p className="font-mono text-light-green text-sm px-2">{item.first_air_date}</p>
                                 </div>
-                                <button className="font-mono text-pink text-sm p-2">
+                                <button onClick={() => handleSelectTV({id: item.id, media_type: 'tv', original_name: item.original_name, first_air_date: item.first_air_date, genre_ids: item.genre_ids, poster_path: item.poster_path})} className="font-mono text-pink text-sm p-2">
                                     Select
                                 </button>
                             </div>
@@ -158,37 +299,52 @@ const Add = () => {
                     validationSchema={addSchema}
                     initialValues={{ user_rating: "0", comments: "No comments added", date_watched: `${year}-${month}-${day}` }}
                     onSubmit={(values) => {
-                        alert(JSON.stringify(values));
+                        const userRatingNumber = parseFloat(values.user_rating);
+
+                        if (isNaN(userRatingNumber)) {
+                            console.error('Invalid user_rating value:', values.user_rating);
+                            return;
+                        }
+
+                        if (selectedMovieData) {
+                            handleFormSubmit({ ...values, user_rating: userRatingNumber }, selectedMovieData, movieGenres);
+                        } else if (selectedTVData) {
+                            handleFormSubmit({ ...values, user_rating: userRatingNumber }, selectedTVData, tvGenres);
+                        } else {
+                            console.error('No selected data found.');
+                        }
                     }}
                 >
-                    <Form>
-                        <TextInput
-                            label='Rating'
-                            name='user_rating'
-                            type='number'
-                            placeholder='1'
-                            width='lg:w-[900px] md:w-96 sm:w-48'
-                        />
-                        <TextInput
-                            label='Date Watched'
-                            name='date_watched'
-                            type='date'
-                            placeholder='DD-MM-YYYY'
-                            width='lg:w-[900px] md:w-96 sm:w-48'
-                        />
-                        <TextInput
-                            label='Comments'
-                            name='comments'
-                            type='text'
-                            placeholder='Add comments here'
-                            width='lg:w-[900px] md:w-96 sm:w-48'
-                        />
-                        <div className="flex gap-3 justify-center items-center pt-10 p-5">
-                            <button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink md:w-96 sm:w-48 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
-                                Save
-                            </button>
-                        </div>
-                    </Form>
+                    {({ handleSubmit }) => (
+                        <Form onSubmit={handleSubmit}>
+                            <TextInput
+                                label='Rating'
+                                name='user_rating'
+                                type='number'
+                                placeholder='1'
+                                width='lg:w-[900px] md:w-96 sm:w-48'
+                            />
+                            <TextInput
+                                label='Date Watched'
+                                name='date_watched'
+                                type='date'
+                                placeholder='DD-MM-YYYY'
+                                width='lg:w-[900px] md:w-96 sm:w-48'
+                            />
+                            <TextInput
+                                label='Comments'
+                                name='comments'
+                                type='text'
+                                placeholder='Add comments here'
+                                width='lg:w-[900px] md:w-96 sm:w-48'
+                            />
+                            <div className="flex gap-3 justify-center items-center pt-10 p-5">
+                                <button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink md:w-96 sm:w-48 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+                                    Save
+                                </button>
+                            </div>
+                        </Form>
+                    )}
                 </Formik>
             </div>
         </div>

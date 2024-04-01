@@ -16,8 +16,17 @@ const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[
 	})
 }
 
+const addWatchlist = (token: string, data: WatchlistType) => {
+    const header = {
+        headers: { Authorization: `Bearer ${token}` },
+    }
+
+    axios.post(`${config.BACKEND_URL}/add`, data, header)
+}
+
 const watchlistService = {
-    getUserWatchlist
+    getUserWatchlist,
+    addWatchlist
 }
 
 export default watchlistService
