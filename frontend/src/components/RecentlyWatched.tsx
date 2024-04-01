@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { WatchlistType } from '../types/watchlist'
 import watchlistService from '../services/watchlistService'
-import { useAppSelector } from '../hooks'
 import { useNavigate } from 'react-router-dom'
 import Notification from './Notification'
+import middleware from '../utils/middleware'
 
 const RecentlyWatched = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -15,25 +15,8 @@ const RecentlyWatched = () => {
 
     const navigate = useNavigate()
 
-    const tokenFromLocalStorage = localStorage.getItem('loggedMovieappUser');
-    let token: string | null = null
-    let userID: string | null = null
-
-    try {
-    const tokenData = JSON.parse(tokenFromLocalStorage as string)
-    token = tokenData?.token
-    userID = tokenData?.user_id
-    } catch (error) {
-    console.error('Error parsing token from local storage:', error)
-    }
-
-    const reduxToken = useAppSelector(state => state.auth.token)
-    const reduxUser = useAppSelector(state => state.auth.userId)
-
-    if (!token) {
-        token = reduxToken
-        userID = reduxUser
-    }
+    const token: string | null = middleware.getToken()
+    const userID: string | null = middleware.getUserID()
 
     const userWatchlist = async (): Promise<void> => {
         try {

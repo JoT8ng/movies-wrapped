@@ -3,16 +3,17 @@ import logo from '../assets/MoviesWrapped_Logo-Solid.png'
 import Summary from '../components/summary'
 import Trending from '../components/trending'
 import { logout } from '../reducers/AuthReducer'
-import { useAppDispatch, useAppSelector } from '../hooks'
+import { useAppDispatch } from '../hooks'
 import userService from "../services/userService"
 import RecentlyWatched from '../components/RecentlyWatched'
+import middleware from '../utils/middleware'
 
 const Dashboard = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
-    const token = useAppSelector(state => state.auth.token)
-    const username = useAppSelector(state => state.auth.username)
+    const token: string | null = middleware.getToken()
+    const username: string | null = middleware.getUsername()
 
     const handleLogout = async (): Promise<void> => {
         try {
