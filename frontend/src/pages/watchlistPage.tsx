@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import middleware from '../utils/middleware'
 import watchlistService from '../services/watchlistService'
 import { WatchlistType } from '../types/watchlist'
+import Modal from '../components/modal'
 
 const WatchlistPage = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -14,6 +15,8 @@ const WatchlistPage = () => {
     const [trending, setTrending] = useState<boolean>(true)
     const [moviesData, setMoviesData] = useState<WatchlistType[]>([])
     const [tvData, setTvData] = useState<WatchlistType[]>([])
+    const [modal, setModal] = useState<boolean>(false)
+    const [modalData, setModalData] = useState<WatchlistType | null>(null)
 
     const navigate = useNavigate()
 
@@ -57,6 +60,18 @@ const WatchlistPage = () => {
         console.log('trending toggle:', value)
     }
 
+    const modalToggle = (data: WatchlistType | null) => {
+        setModal(!modal)
+        console.log('modal toggle:', modal)
+
+        if (modal === true && data != null) {
+            setModalData(data)
+        } else {
+            setModalData(null)
+        }
+        console.log('modal data:', modalData)
+    }
+
     return (
         <div className="bg-base-green min-h-screen">
             <div className='flex justify-between py-5 px-10 gap-8'>
@@ -67,7 +82,7 @@ const WatchlistPage = () => {
                     <IoMdClose className='w-6 h-6 text-light-green' />
                 </a>
             </div>
-            <div className="theme-gradient rounded flex flex-col justify-center items-center px-20">
+            <div className="theme-gradient rounded-lg flex flex-col justify-center items-center px-20">
                 <div className='flex flex-col justify-start gap-9 pb-8'>
                     <h1 className="font-sans font-bold lg:text-lg py-3 md:text-sm sm:text-xs text-base-green text-center">Watchlist</h1>
                     <div className='flex w-64 rounded-full border border-base-green'>
@@ -84,19 +99,35 @@ const WatchlistPage = () => {
                     {trending ? 
                         (moviesData.map(item =>
                             <div key={`Trending ${item.title}, ${item.comments}`} className='flex-shrink-0 mr-4'>
-                                <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
+                                <button onClick={() => {modalToggle(item)}}>
+                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 hover:rounded-lg transition-shadow duration-300 ease-in-out rounded' />
+                                </button>
                                 <p className='font-sans text-sm text-base-green text-center max-w-[150px]'>{item.title}</p>
                             </div>
                         ))
                         :
                         (tvData.map(item =>
                             <div key={`Trending ${item.title}, ${item.comments}`} className='flex-shrink-0 mr-4'>
-                                <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
+                                <button onClick={() => {modalToggle(item)}}>
+                                    <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 hover:rounded-lg transition-shadow duration-300 ease-in-out rounded' />
+                                </button>
                                 <p className='font-sans text-sm text-base-green text-center max-w-[150px]'>{item.title}</p>
                             </div>
                         ))
                     }
                 </div>
+                {modalData && (
+                    <div className='fixed top-0 left-0 flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-50'>
+                        <div className='flex flex-col bg-dark-green rounded-lg p-5 shadow-md max-w-[70%] max-h-[80%] overflow-y-auto hide-scrollbar'>
+                            <div className='flex justify-end'>
+                                <button onClick={() => {modalToggle(null)}}>
+                                    <IoMdClose className='w-6 h-6 text-light-green' />
+                                </button>
+                            </div>
+                            <Modal modalData={modalData} />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )

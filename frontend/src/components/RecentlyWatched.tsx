@@ -75,14 +75,14 @@ const RecentlyWatched = () => {
                 {trending ? 
                     (moviesData.map(item =>
                         <div key={`Trending ${item.title}, ${item.comments}`} className='flex-shrink-0 mr-4'>
-                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
+                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 hover:rounded-lg transition-shadow duration-300 ease-in-out rounded' />
                             <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.title}</p>
                         </div>
                     ))
                     :
                     (tvData.map(item =>
                         <div key={`Trending ${item.title}, ${item.comments}`} className='flex-shrink-0 mr-4'>
-                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 transition-shadow duration-300 ease-in-out rounded' />
+                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 hover:rounded-lg transition-shadow duration-300 ease-in-out rounded' />
                             <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.title}</p>
                         </div>
                     ))
