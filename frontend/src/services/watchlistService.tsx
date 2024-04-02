@@ -1,6 +1,6 @@
 import axios from 'axios'
 import config from '../utils/config'
-import { WatchlistType } from '../types/watchlist'
+import { UpdateEntry, WatchlistType } from '../types/watchlist'
 
 const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[]> => {
     const header = {
@@ -24,9 +24,18 @@ const addWatchlist = (token: string, data: WatchlistType) => {
     axios.post(`${config.BACKEND_URL}/add`, data, header)
 }
 
+const updateWatchlist = (token: string, data: UpdateEntry) => {
+    const header = {
+        headers: { Authorization: `Bearer ${token}` },
+    }
+
+    axios.put(`${config.BACKEND_URL}/update`, data, header)
+}
+
 const watchlistService = {
     getUserWatchlist,
-    addWatchlist
+    addWatchlist,
+    updateWatchlist
 }
 
 export default watchlistService

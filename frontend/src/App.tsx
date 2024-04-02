@@ -8,6 +8,8 @@ import Dashboard from './pages/dashboard'
 import Add from './pages/add'
 import Manual from './pages/manualEntry'
 import PrivateRoutes from './utils/PrivateRoutes'
+import WatchlistPage from './pages/watchlistPage'
+import Edit from './pages/edit'
 
 function App() {
 
@@ -21,6 +23,8 @@ function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/add' element={<Add />} />
           <Route path='/manual' element={<Manual />} />
+          <Route path='/watchlist' element={<WatchlistPage />} />
+          <Route path='/edit' element={<Edit />} />
         </Route>
         <Route path='/contact' element={<Contact />} />
       </Routes>

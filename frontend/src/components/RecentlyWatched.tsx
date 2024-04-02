@@ -58,7 +58,9 @@ const RecentlyWatched = () => {
     return (
         <div>
             <div className='flex justify-start gap-9 pb-5'>
-                <h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green'>Recently Watched</h1>
+                <a href='/watchlist'>
+                    <h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green'>Recently Watched</h1>
+                </a>
                 <div className='flex w-64 rounded-full border border-pink'>
                     <div className='w-1/2'>
                         <button onClick={() => trendingToggle(true)} className={`${trending ? 'bg-pink' : ''} transition-colors duration-300 font-sans text-light-green rounded-full w-full py-2 text-xs`}>Movies</button>

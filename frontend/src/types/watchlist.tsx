@@ -13,6 +13,7 @@ export interface WatchlistType {
 }
 
 export interface UpdateEntry {
+    id: number;
     user_rating: number;
     comments: string;
     date_watched: string;

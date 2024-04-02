@@ -20,3 +20,11 @@
 .hide-scrollbar::-webkit-scrollbar-thumb {
     display: none; /* WebKit-based browsers */
 }
+
+.theme-gradient {
+    background: rgb(226,235,193);
+    background: -moz-linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
+    background: -webkit-linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
+    background: linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e2ebc1",endColorstr="#ef5657",GradientType=1);
+}
