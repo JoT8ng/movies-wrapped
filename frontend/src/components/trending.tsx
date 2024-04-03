@@ -53,14 +53,14 @@ const Trending = () => {
                 {trending ? 
                     (trendingMoviesData.results.map(item =>
                         <div key={`Trending ${item.original_title}`} className='flex-shrink-0 mr-4'>
-                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 hover:rounded-lg transition-shadow duration-300 ease-in-out rounded' />
+                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='w-[150px] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out rounded' />
                             <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.original_title}</p>
                         </div>
                     ))
                     :
                     (trendingTvData.results.map(item =>
                         <div key={`Trending ${item.original_name}`} className='flex-shrink-0 mr-4'>
-                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_name}`} className='w-[150px] shadow-md hover:shadow-xl hover:scale-105 hover:rounded-lg transition-shadow duration-300 ease-in-out rounded' />
+                            <img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_name}`} className='w-[150px] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out rounded' />
                             <p className='font-sans text-sm text-light-green text-center max-w-[150px]'>{item.original_name}</p>
                         </div>
                     ))
