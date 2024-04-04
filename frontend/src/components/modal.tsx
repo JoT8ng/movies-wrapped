@@ -76,6 +76,32 @@ const Modal: React.FC<ModalProps> = ({ modalData }) => {
         }
     }
 
+        const handleDelete = async () => {
+        try {
+            const entryID = modalData.id.toString()
+
+            await watchlistService.deleteWatchlist(token as string, {id: entryID})
+
+            setErrorMessage('Deletion successful! Refresh the page to see the update')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(true)
+        } catch (error) {
+            console.error('Error submitting form:', error)
+            if (error.response && error.response.status === 401) {
+                window.alert('Your session has expired. Please log in again.')
+                window.localStorage.clear()
+                navigate('/login')
+            }
+            setErrorMessage('Server error. Failed to delete entry. Please logout or try again later.')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(false)
+        }
+    }
+
     const editToggle = () => {
         setEdit(!edit)
         console.log('edit toggle:', edit)
@@ -85,7 +111,7 @@ const Modal: React.FC<ModalProps> = ({ modalData }) => {
         <div>
             <div className='flex justify-start gap-5 py-3'>
                 <button onClick={editToggle} className='font-mono font-bold text-md text-pink hover:text-light-green'>Edit</button>
-                <button className='font-mono font-bold text-md text-pink hover:text-light-green'>Delete</button>
+                <button onClick={handleDelete} className='font-mono font-bold text-md text-pink hover:text-light-green'>Delete</button>
             </div>
             {!edit ? (
                 <div className='flex items-center gap-3'>
@@ -93,6 +119,7 @@ const Modal: React.FC<ModalProps> = ({ modalData }) => {
                     <div className='flex flex-col justify-between'>
                         <div>
                             <h1 className='font-mono font-bold text-md text-pink'>{modalData.title}</h1>
+                            <Notification error={errorMessage} message={message} />
                         </div>
                         <div>
                             <p className='font-mono text-xs text-light-green'>Rating: {modalData.user_rating}</p>

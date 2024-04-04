@@ -1,6 +1,6 @@
 import axios from 'axios'
 import config from '../utils/config'
-import { UpdateEntry, WatchlistType } from '../types/watchlist'
+import { DeleteEntry, UpdateEntry, WatchlistType } from '../types/watchlist'
 
 const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[]> => {
     const header = {
@@ -32,10 +32,20 @@ const updateWatchlist = (token: string, data: UpdateEntry) => {
     axios.put(`${config.BACKEND_URL}/update`, data, header)
 }
 
+const deleteWatchlist = (token: string, data: DeleteEntry) => {
+    const deleteRequest = {
+        headers: { Authorization: `Bearer ${token}` },
+        data: data
+    }
+
+    axios.delete(`${config.BACKEND_URL}/delete`, deleteRequest)
+}
+
 const watchlistService = {
     getUserWatchlist,
     addWatchlist,
-    updateWatchlist
+    updateWatchlist,
+    deleteWatchlist
 }
 
 export default watchlistService

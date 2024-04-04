@@ -18,3 +18,7 @@ export interface UpdateEntry {
     comments: string;
     date_watched: string;
 }
+
+export interface DeleteEntry {
+    id: string;
+}
