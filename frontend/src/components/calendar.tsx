@@ -5,14 +5,22 @@ import {
     startOfMonth,
     isToday
   } from "date-fns"
+import { useState, ChangeEvent } from "react"
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo"]
 const MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const YEAR: number[] = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
 
 const Calendar = () => {
+    const [selectedYear, setSelectedYear] = useState<number>(2024)
+
+    const handleYearChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setSelectedYear(parseInt(event.target.value))
+    }
+
     const months = [];
     for (let i = 0; i < 12; i++) {
-        const monthDate = new Date(2024, i, 1);
+        const monthDate = new Date(selectedYear, i, 1);
         const firstDayOfMonth = startOfMonth(monthDate);
         const lastDayOfMonth = endOfMonth(monthDate);
         const daysInMonth = eachDayOfInterval({
@@ -25,19 +33,27 @@ const Calendar = () => {
         // Array to hold the days of the month including empty cells
         const monthDays = Array(startingDayIndex).fill(null).concat(daysInMonth)
 
-        months.push(monthDays);
+        months.push(monthDays)
     }
 
     return (
         <div>
             <div className="justify-start pb-5">
-                <h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green'>Calendar</h1>
+                <h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green pb-5'>Calendar</h1>
+                <select id="selectedYear" name="selectedYear" onChange={handleYearChange} value={selectedYear} className="text-input rounded bg-gray font-mono text-light-green text-sm p-2">
+                    <option value="undefined">Select a year</option>
+                    {YEAR.map((year) => (
+                        <option key={year} value={year}>
+                            {year}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="flex flex-col">
                 <div className="flex gap-3 justify-center pb-3">
-                    {WEEKDAYS.map((day) => {
+                    {WEEKDAYS.map((day, index) => {
                         return (
-                            <div key={day} className="flex items-center justify-center w-4 h-4 rounded-md font-sans text-light-green text-xs text-center">
+                            <div key={`${day}-${index}`} className="flex items-center justify-center w-4 h-4 rounded-md font-sans text-light-green text-xs text-center">
                             {day}
                             </div>
                         )
