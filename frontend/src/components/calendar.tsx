@@ -3,9 +3,13 @@ import {
     endOfMonth,
     getDay,
     startOfMonth,
-    isToday
+    isToday,
+    format
   } from "date-fns"
-import { useState, ChangeEvent } from "react"
+import { useState, ChangeEvent, useEffect } from "react"
+import middleware from '../utils/middleware'
+import watchlistService from "../services/watchlistService"
+import { WatchlistType } from '../types/watchlist'
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su", "Mo"]
 const MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -13,6 +17,7 @@ const YEAR: number[] = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 20
 
 const Calendar = () => {
     const [selectedYear, setSelectedYear] = useState<number>(2024)
+    const [userWatchlistData, setUserWatchlistData] = useState<WatchlistType[]>([])
 
     const handleYearChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedYear(parseInt(event.target.value))
@@ -34,6 +39,27 @@ const Calendar = () => {
         const monthDays = Array(startingDayIndex).fill(null).concat(daysInMonth)
 
         months.push(monthDays)
+    }
+
+    const token: string | null = middleware.getToken()
+    const userID: string | null = middleware.getUserID()
+
+    const userWatchlist = async (): Promise<void> => {
+        try {
+            const data = await watchlistService.getUserWatchlist(token as string, userID as string)
+            setUserWatchlistData(data)
+        } catch (error) {
+            console.error('Error getting watchlist:', error)
+        }
+    }
+
+    useEffect(() => {
+        // On dashboard load get user's watchlist from backend
+        userWatchlist()
+    }, [])
+
+    const isWatchedDate = (date: string): boolean => {
+        return userWatchlistData.some(item => format(new Date(item.date_watched), 'yyyy-MM-dd') === date);
     }
 
     return (
@@ -79,11 +105,14 @@ const Calendar = () => {
                                         }
                                         const isCurrentDay = isToday(day)
                                         const dayOfMonth = day.getDate()
+                                        const formattedDate = format(day, 'yyyy-MM-dd')
+                                        const isWatched = isWatchedDate(formattedDate)
+
                                         return (
                                             <div
                                                 key={index}
                                                 className={`flex items-center justify-center w-5 h-5 rounded-md text-xs text-black ${
-                                                    isCurrentDay ? 'bg-light-green' : 'bg-green'
+                                                    isWatched ? 'bg-pink' : (isCurrentDay ? 'bg-light-green' : 'bg-green')
                                                     }`}
                                             >
                                                 {dayOfMonth}
