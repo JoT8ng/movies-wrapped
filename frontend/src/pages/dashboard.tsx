@@ -7,6 +7,7 @@ import { useAppDispatch } from '../hooks'
 import userService from "../services/userService"
 import RecentlyWatched from '../components/RecentlyWatched'
 import middleware from '../utils/middleware'
+import Calendar from '../components/calendar'
 
 const Dashboard = () => {
     const dispatch = useAppDispatch()
@@ -58,6 +59,9 @@ const Dashboard = () => {
                 </div>
                 <div className='flex flex-col rounded bg-base-green p-5'>
                     <Trending />
+                </div>
+                <div className='flex flex-col rounded bg-base-green p-5'>
+                    <Calendar />
                 </div>
             </div>
         </div>
