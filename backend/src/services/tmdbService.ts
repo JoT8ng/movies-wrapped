@@ -27,7 +27,7 @@ const searchMovies = async (searchQuery: string ): Promise<Search<MovieResult>> 
 
 const searchShows = async (searchQuery: string ): Promise<Search<TVResult>> => {
     const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?query=${searchQuery}&include_adult=true&language=en-US&page=1&api_key=${config.TMDB_API_KEY}`
+        `https://api.themoviedb.org/3/search/tv?query=${searchQuery}&include_adult=true&language=en-US&page=1&api_key=${config.TMDB_API_KEY}`
     );
     return response.data as Search<TVResult>;
 };

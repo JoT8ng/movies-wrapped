@@ -141,7 +141,7 @@ const Barchart = () => {
 
     return (
         <div>
-            <Bar data-testid='barchart' data={newChartData} options={options} />
+            <Bar data-testid='barchart' width={100} height={100} data={newChartData} options={options} />
         </div>
     )
 }

@@ -98,10 +98,12 @@ const Add = () => {
 
     const handleSearchSubmit = async (values: QueryData, setSubmitting: (isSubmitting: boolean) => void) => {
         try {
+        const encodedQuery = encodeURIComponent(values.query)
+
           if (values.buttonClicked === 'searchMovies') {
-            searchMovies(values.query)
+            searchMovies(encodedQuery)
           } else if (values.buttonClicked === 'searchTV') {
-            searchShows(values.query)
+            searchShows(encodedQuery)
           }
         } catch (error) {
           console.error('Error submitting search form:', error)
@@ -187,6 +189,12 @@ const Add = () => {
             setTVGenres([])
             setSelectedMovieData(null)
             setMovieGenres([])
+
+            setErrorMessage('Entry successfully added to watchlist!')
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 10000)
+            setMessage(true)
         } catch (error) {
             console.error('Error submitting form:', error)
             if (error.response && error.response.status === 401) {
