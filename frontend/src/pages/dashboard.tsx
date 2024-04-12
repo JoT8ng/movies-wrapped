@@ -33,8 +33,8 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="flex bg-dark-green py-10 p-3 gap-3 min-h-screen">
-            <div className="flex flex-col p-5 justify-between rounded bg-base-green w-1/5">
+        <div className="flex xl:flex-row lg:flex-row md:flex-row sm:flex-col bg-dark-green py-10 p-3 gap-3 min-h-screen">
+            <div className="flex flex-col p-5 justify-between rounded bg-base-green xl:w-1/5 lg:w-1/5 md:w-1/5 sm:w-full">
                 <div className='flex flex-col gap-3'>
                     <div className='flex flex-col gap-8'>
                         <a href='/'>
@@ -50,7 +50,7 @@ const Dashboard = () => {
                     Log out
                 </button>
             </div>
-            <div className='flex flex-col gap-3 bg-dark-green w-4/5'>
+            <div className='flex flex-col gap-3 bg-dark-green xl:w-4/5 lg:w-4/5 md:w-4/5 sm:w-full'>
                 <div className='flex flex-col rounded bg-base-green p-5 gap-5'>
                     <a href='/add' className="bg-pink hover:bg-base-green hover:border hover:border-pink py-2 w-full rounded items-center text-center font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
                         Add Movie/Show
