@@ -28,3 +28,21 @@
     background: linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e2ebc1",endColorstr="#ef5657",GradientType=1);
 }
+
+.weekday {
+  grid-column: span 7; /* Each weekday cell spans 7 columns */
+}
+
+.month {
+  grid-column: span 37; /* Each month spans all 37 columns */
+}
+
+.monthdays {
+  display: grid;
+  grid-template-columns: repeat(37, 1fr); /* 37 columns */
+  grid-template-rows: repeat(13, auto); /* 13 rows */
+}
+
+.monthdays > div {
+  width: calc(100% / 37); /* Each day cell occupies 1/37th of the width */
+}

@@ -60,9 +60,7 @@ const Dashboard = () => {
                 <div className='flex flex-col rounded bg-base-green p-5'>
                     <Trending />
                 </div>
-                <div className='flex flex-col rounded bg-base-green p-5'>
-                    <Calendar />
-                </div>
+                <Calendar />
             </div>
         </div>
     )

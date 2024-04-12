@@ -63,7 +63,7 @@ const Calendar = () => {
     }
 
     return (
-        <div>
+        <div className='flex flex-col rounded bg-base-green p-5'>
             <div className="justify-start pb-5">
                 <h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green pb-5'>Calendar</h1>
                 <select id="selectedYear" name="selectedYear" onChange={handleYearChange} value={selectedYear} className="text-input rounded bg-gray font-mono text-light-green text-sm p-2">
@@ -75,18 +75,8 @@ const Calendar = () => {
                     ))}
                 </select>
             </div>
-            <div className="flex flex-col">
-                <div className="flex gap-3 justify-center pb-3">
-                    {WEEKDAYS.map((day, index) => {
-                        return (
-                            <div key={`${day}-${index}`} className="flex items-center justify-center w-4 h-4 rounded-md font-sans text-light-green text-xs text-center">
-                            {day}
-                            </div>
-                        )
-                    })}
-                </div>
-                <div className="flex">
-                    <div className="flex flex-col gap-3 justify-center">
+            <div className="flex overflow-x-auto scroll-smooth hide-scrollbar">
+                    <div className="flex flex-col gap-3 pt-7">
                         {MONTH.map((month) => {
                             return (
                                 <div key={month} className="flex font-sans text-light-green text-xs text-center">
@@ -95,10 +85,19 @@ const Calendar = () => {
                             )
                         })}
                     </div>
-                    <div>
-                        <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-col gap-2 pl-2">
+                        <div className="flex gap-2 pl-2">
+                        {WEEKDAYS.map((day, index) => {
+                            return (
+                                <div key={`${day}-${index}`} className="w-5 h-5 rounded-md font-sans text-light-green text-xs text-center">
+                                {day}
+                                </div>
+                            )
+                        })}
+                        </div>
+                        <div className="flex-col">
                             {months.map((monthDays, index) => (
-                                <div key={index} className="flex flex-wrap gap-2 pl-2">
+                                <div key={index} className="flex flex-shrink-0 gap-2 pl-2 pb-2">
                                     {monthDays.map((day, index) => {
                                         if (day === null) {
                                             return <div key={index} className="w-5 h-5"></div>
@@ -122,7 +121,6 @@ const Calendar = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
