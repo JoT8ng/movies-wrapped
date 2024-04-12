@@ -76,17 +76,17 @@ const Calendar = () => {
                 </select>
             </div>
             <div className="flex overflow-x-auto scroll-smooth hide-scrollbar">
-                    <div className="flex flex-col gap-3 pt-7">
-                        {MONTH.map((month) => {
-                            return (
-                                <div key={month} className="flex font-sans text-light-green text-xs text-center">
-                                {month}
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className="flex flex-col gap-2 pl-2">
-                        <div className="flex gap-2 pl-2">
+                <div className="flex flex-col gap-3 pt-7">
+                    {MONTH.map((month) => {
+                        return (
+                            <div key={month} className="flex font-sans text-light-green text-xs text-center">
+                            {month}
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className="flex flex-col gap-2 pl-2">
+                    <div className="flex gap-2 pl-2">
                         {WEEKDAYS.map((day, index) => {
                             return (
                                 <div key={`${day}-${index}`} className="w-5 h-5 rounded-md font-sans text-light-green text-xs text-center">
@@ -94,33 +94,33 @@ const Calendar = () => {
                                 </div>
                             )
                         })}
-                        </div>
-                        <div className="flex-col">
-                            {months.map((monthDays, index) => (
-                                <div key={index} className="flex flex-shrink-0 gap-2 pl-2 pb-2">
-                                    {monthDays.map((day, index) => {
-                                        if (day === null) {
-                                            return <div key={index} className="w-5 h-5"></div>
-                                        }
-                                        const isCurrentDay = isToday(day)
-                                        const dayOfMonth = day.getDate()
-                                        const formattedDate = format(day, 'yyyy-MM-dd')
-                                        const isWatched = isWatchedDate(formattedDate)
+                    </div>
+                    <div className="flex-col">
+                        {months.map((monthDays, index) => (
+                            <div key={index} className="flex flex-shrink-0 gap-2 pl-2 pb-2">
+                                {monthDays.map((day, index) => {
+                                    if (day === null) {
+                                        return <div key={index} className="w-5 h-5"></div>
+                                    }
+                                    const isCurrentDay = isToday(day)
+                                    const dayOfMonth = day.getDate()
+                                    const formattedDate = format(day, 'yyyy-MM-dd')
+                                    const isWatched = isWatchedDate(formattedDate)
 
-                                        return (
-                                            <div
-                                                key={index}
-                                                className={`flex items-center justify-center w-5 h-5 rounded-md text-xs text-black ${
-                                                    isWatched ? 'bg-pink' : (isCurrentDay ? 'bg-light-green' : 'bg-green')
-                                                    }`}
-                                            >
-                                                {dayOfMonth}
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-                            ))}
-                        </div>
+                                    return (
+                                        <div
+                                            key={index}
+                                            className={`flex items-center justify-center w-5 h-5 rounded-md text-xs text-black ${
+                                                isWatched ? 'bg-pink' : (isCurrentDay ? 'bg-light-green' : 'bg-green')
+                                                }`}
+                                        >
+                                            {dayOfMonth}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
