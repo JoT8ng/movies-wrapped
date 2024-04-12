@@ -5,6 +5,7 @@ import watchlistService from '../services/watchlistService'
 import { Chart as ChartJS, ArcElement, Title, Legend, Tooltip } from 'chart.js'
 import { Pie } from 'react-chartjs-2'
 import { ChartProps } from 'react-chartjs-2'
+import Barchart from './barchart'
 /*import Piechart from './pichart'*/
 
 const YEAR: number[] = [2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
@@ -143,7 +144,10 @@ const Summary = () => {
                     <span className='text-pink'>{selectedYear}</span> Summary
                 </p>
                 {/*<Piechart totalYear={totalYear} />*/}
-                <Pie data-testid='piechart' data={newChartData} options={options} />
+                <div className='pb-5'>
+                    <Pie data-testid='piechart' data={newChartData} options={options} />
+                </div>
+                <Barchart />
             </div>
         </div>
     )
