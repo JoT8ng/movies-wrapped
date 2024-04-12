@@ -1,6 +1,8 @@
 # movies-wrapped
 
-_Web App Last update 10/04/2024_
+_Web App Last update 12/04/2024_
+
+![Homepage](images/movies-preview.png)
 
 Work in progress non-commercial app that allows users to keep track of movies and shows they watched. Users can generate yearly and monthly summaries.
 
