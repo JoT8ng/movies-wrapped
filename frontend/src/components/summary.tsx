@@ -147,7 +147,9 @@ const Summary = () => {
                 <div className='pb-5'>
                     <Pie data-testid='piechart' data={newChartData} options={options} />
                 </div>
-                <Barchart />
+                <div className='pb-5'>
+                    <Barchart />
+                </div>
             </div>
         </div>
     )

@@ -162,7 +162,7 @@ const Manual = () => {
                                 <option value="tv">TV Show</option>
                             </SelectInput>
                             <label className="checkbox-input font-sans text-sm text-light-green text-start py-1 px-14">Genres</label>
-                                <div className="grid grid-cols-4 px-14">
+                                <div className="grid lg:grid-cols-4 md:grid-cols-4 sm:lg:grid-cols-2 px-14">
                                     {genresOptions.map((item) => (
                                         <div key={item.id}>
                                             <Field
