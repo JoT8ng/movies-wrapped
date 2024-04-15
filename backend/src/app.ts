@@ -18,18 +18,18 @@ mongoose.set('strictQuery', false);
 logger.info('connecting to', config.MONGODB_URI);
 
 mongoose.connect(config.MONGODB_URI as string)
-  .then(() => {
-    logger.info('connected to MongoDB');
-  })
-  .catch((error) => {
-    logger.error('error connecting to MongoDB:', error.message);
-  });
+	.then(() => {
+		logger.info('connected to MongoDB');
+	})
+	.catch((error) => {
+		logger.error('error connecting to MongoDB:', error.message);
+	});
 
 const corsOptions = {
-  origin: config.FRONTEND_URL,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
-  credentials: true,
+	origin: config.FRONTEND_URL,
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
+	credentials: true,
 };
 
 app.use(express.json());
