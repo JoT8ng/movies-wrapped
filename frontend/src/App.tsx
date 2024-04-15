@@ -12,23 +12,23 @@ import WatchlistPage from './pages/watchlistPage'
 
 function App() {
 
-  return (
-    <>
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route element={<PrivateRoutes />}>
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/add' element={<Add />} />
-          <Route path='/manual' element={<Manual />} />
-          <Route path='/watchlist' element={<WatchlistPage />} />
-        </Route>
-        <Route path='/contact' element={<Contact />} />
-      </Routes>
-      <Footer />
-    </>
-  )
+	return (
+		<>
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/login' element={<Login />} />
+				<Route path='/signup' element={<Signup />} />
+				<Route element={<PrivateRoutes />}>
+					<Route path='/dashboard' element={<Dashboard />} />
+					<Route path='/add' element={<Add />} />
+					<Route path='/manual' element={<Manual />} />
+					<Route path='/watchlist' element={<WatchlistPage />} />
+				</Route>
+				<Route path='/contact' element={<Contact />} />
+			</Routes>
+			<Footer />
+		</>
+	)
 }
 
 export default App

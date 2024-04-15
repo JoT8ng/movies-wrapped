@@ -1,10 +1,10 @@
 export interface UserType {
-    username: string;
-    password: string;
+	username: string;
+	password: string;
 }
 
 export interface LoginType {
-    username: string;
-    token: string;
-    user_id: string;
+	username: string;
+	token: string;
+	user_id: string;
 }

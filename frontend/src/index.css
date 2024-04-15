@@ -5,26 +5,26 @@
 
 /* Hide scrollbar for WebKit-based browsers */
 .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+	display: none;
 }
 
 /* Hide scrollbar for Firefox */
 .hide-scrollbar {
-    scrollbar-width: none; /* Firefox 64+ */
+	scrollbar-width: none; /* Firefox 64+ */
 }
 
 .hide-scrollbar::-webkit-scrollbar-track {
-    background-color: transparent; /* WebKit-based browsers */
+	background-color: transparent; /* WebKit-based browsers */
 }
 
 .hide-scrollbar::-webkit-scrollbar-thumb {
-    display: none; /* WebKit-based browsers */
+	display: none; /* WebKit-based browsers */
 }
 
 .theme-gradient {
-    background: rgb(226,235,193);
-    background: -moz-linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
-    background: -webkit-linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
-    background: linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e2ebc1",endColorstr="#ef5657",GradientType=1);
+	background: rgb(226,235,193);
+	background: -moz-linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
+	background: -webkit-linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
+	background: linear-gradient(0deg, rgba(226,235,193,1) 0%, rgba(239,86,87,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e2ebc1",endColorstr="#ef5657",GradientType=1);
 }

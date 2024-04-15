@@ -54,72 +54,73 @@ interface PieData {
 }
 
 const Piechart: React.FC<{ totalYear: WatchlistType[] }> = ({ totalYear }) => {
-    const [chartData, setChartData] = useState<PieData>({
-        Action: 0,
-        Adventure: 0,
-        Animation: 0,
-        Comedy: 0,
-        Crime: 0,
-        Documentary: 0,
-        Drama: 0,
-        Family: 0,
-        Fantasy: 0,
-        History: 0,
-        Horror: 0,
-        Music: 0,
-        Mystery: 0,
-        Romance: 0,
-        Science_Fiction: 0,
-        Thriller: 0,
-        TV_Movie: 0,
-        War: 0,
-        Western: 0,
-    })
+	const [chartData, setChartData] = useState<PieData>({
+		Action: 0,
+		Adventure: 0,
+		Animation: 0,
+		Comedy: 0,
+		Crime: 0,
+		Documentary: 0,
+		Drama: 0,
+		Family: 0,
+		Fantasy: 0,
+		History: 0,
+		Horror: 0,
+		Music: 0,
+		Mystery: 0,
+		Romance: 0,
+		Science_Fiction: 0,
+		Thriller: 0,
+		TV_Movie: 0,
+		War: 0,
+		Western: 0,
+	})
 
-    useEffect(() => {
-        const updatedChartData = { ...chartData };
+	useEffect(() => {
+		const updatedChartData = { ...chartData }
 
-        totalYear.forEach((item) => {
-            item.genres.forEach((genre) => {
-                const genreName = genre.name.replace(/ /g, '_')
-                if (updatedChartData[genreName] !== undefined) {
-                    updatedChartData[genreName]++;
-                }
-            });
-        });
+		totalYear.forEach((item) => {
+			item.genres.forEach((genre) => {
+				const genreName = genre.name.replace(/ /g, '_')
+				if (updatedChartData[genreName] !== undefined) {
+					updatedChartData[genreName]++
+				}
+			})
+		})
 
-        setChartData(updatedChartData);
-    }, [totalYear])
+		setChartData(updatedChartData)
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [totalYear])
 
-    const newChartData = {
+	const newChartData = {
 		labels: GENRE,
 		datasets: [
 			{
 				label: 'Genre',
 				data: Object.values(chartData),
 				backgroundColor: [
-                    'rgb(255, 204, 204)',
-                    'rgb(255, 229, 204)',
-                    'rgb(255, 255, 204)',
-                    'rgb(204, 255, 204)',
-                    'rgb(204, 229, 255)',
-                    'rgb(255, 204, 255)',
-                    'rgb(255, 230, 230)',
-                    'rgb(255, 242, 204)',
-                    'rgb(255, 255, 229)',
-                    'rgb(204, 255, 255)',
-                    'rgb(242, 204, 255)',
-                    'rgb(230, 255, 204)',
+					'rgb(255, 204, 204)',
+					'rgb(255, 229, 204)',
+					'rgb(255, 255, 204)',
+					'rgb(204, 255, 204)',
+					'rgb(204, 229, 255)',
+					'rgb(255, 204, 255)',
+					'rgb(255, 230, 230)',
+					'rgb(255, 242, 204)',
+					'rgb(255, 255, 229)',
+					'rgb(204, 255, 255)',
+					'rgb(242, 204, 255)',
+					'rgb(230, 255, 204)',
 				],
 			},
 		],
 	}
 
-    return (
-        <div className='flex'>
-            <Pie data-testid='piechart' data={newChartData} options={options} />
-        </div>
-    )
+	return (
+		<div className='flex'>
+			<Pie data-testid='piechart' data={newChartData} options={options} />
+		</div>
+	)
 }
 
 export default Piechart
