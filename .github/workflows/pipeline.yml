@@ -35,7 +35,7 @@ jobs:
         working-directory: backend
         run: npm install
       - name: Lint backend
-        working-directory: movies-wrapped
+        working-directory: backend
         run: npm run lint
       - name: Build backend
         working-directory: backend
