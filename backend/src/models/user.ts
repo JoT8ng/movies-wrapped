@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import mongoose, { Schema } from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
 import { UserMongo } from '../types/user';
 
 const userSchema: Schema<UserMongo> = new mongoose.Schema({
@@ -23,8 +22,6 @@ const userSchema: Schema<UserMongo> = new mongoose.Schema({
 		}
 	],
 });
-  
-userSchema.plugin(uniqueValidator);
   
 userSchema.set('toJSON', {
 	transform: (_document, returnedObject) => {

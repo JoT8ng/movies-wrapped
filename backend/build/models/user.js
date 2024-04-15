@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 const mongoose_1 = __importDefault(require("mongoose"));
-const mongoose_unique_validator_1 = __importDefault(require("mongoose-unique-validator"));
 const userSchema = new mongoose_1.default.Schema({
     username: {
         type: String,
@@ -26,7 +25,6 @@ const userSchema = new mongoose_1.default.Schema({
         }
     ],
 });
-userSchema.plugin(mongoose_unique_validator_1.default);
 userSchema.set('toJSON', {
     transform: (_document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString();
