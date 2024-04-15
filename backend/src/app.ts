@@ -31,6 +31,7 @@ app.use(cors());
 app.use(express.static('dist'));
 app.use(middleware.requestLogger);
 app.use(middleware.limiter);
+app.use(middleware.authenticateApiKey);
 
 app.use('/tmdb', tmdbRouter);
 app.use('/', watchlistRouter);

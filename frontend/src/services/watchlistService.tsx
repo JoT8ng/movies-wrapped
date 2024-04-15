@@ -4,7 +4,10 @@ import { DeleteEntry, UpdateEntry, WatchlistType } from '../types/watchlist'
 
 const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[]> => {
     const header = {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'x-api-key': config.API_KEY,
+        },
     }
 
     const requestData = {user: userID}
@@ -18,7 +21,10 @@ const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[
 
 const addWatchlist = (token: string, data: WatchlistType) => {
     const header = {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'x-api-key': config.API_KEY,
+        },
     }
 
     axios.post(`${config.BACKEND_URL}/add`, data, header)
@@ -26,7 +32,10 @@ const addWatchlist = (token: string, data: WatchlistType) => {
 
 const updateWatchlist = (token: string, data: UpdateEntry) => {
     const header = {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'x-api-key': config.API_KEY,
+        },
     }
 
     axios.put(`${config.BACKEND_URL}/update`, data, header)
@@ -34,7 +43,10 @@ const updateWatchlist = (token: string, data: UpdateEntry) => {
 
 const deleteWatchlist = (token: string, data: DeleteEntry) => {
     const deleteRequest = {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'x-api-key': config.API_KEY,
+        },
         data: data
     }
 

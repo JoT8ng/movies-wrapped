@@ -87,6 +87,16 @@ const limiter = rateLimit({
   },
 });
 
+const authenticateApiKey = (request: Request, response: Response, next: NextFunction) => {
+  const apiKeyHeader = request.headers['x-api-key'];
+
+  if (!apiKeyHeader || apiKeyHeader !== config.API_KEY) {
+    return response.status(401).json({ message: 'Unauthorized incorrect or missing API key' });
+  }
+
+  next();
+};
+
 export default {
   requestLogger,
   unknownEndpoint,
@@ -94,5 +104,6 @@ export default {
   tokenValidator,
   getTokenFrom,
   checkBlacklist,
-  limiter
+  limiter,
+  authenticateApiKey
 };
