@@ -25,9 +25,16 @@ mongoose.connect(config.MONGODB_URI as string)
     logger.error('error connecting to MongoDB:', error.message);
   });
 
+const corsOptions = {
+  origin: config.FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
+  credentials: true,
+};
+
 app.use(express.json());
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.static('dist'));
 app.use(middleware.requestLogger);
 app.use(middleware.limiter);
