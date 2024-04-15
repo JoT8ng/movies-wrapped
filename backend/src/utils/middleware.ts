@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../utils/config';
 import blacklist from '../models/blacklist';
+import { rateLimit } from 'express-rate-limit';
 
 interface JwtPayload {
   id: string
@@ -73,11 +74,25 @@ const checkBlacklist = async (request: Request, response:Response, next: NextFun
   next();
 };
 
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Redis, Memcached, etc. See below.
+  handler: function (_request, response, _next) {
+    response.status(429).json({
+      message: "Too many requests, please try again later.",
+    });
+  },
+});
+
 export default {
   requestLogger,
   unknownEndpoint,
   errorHandler,
   tokenValidator,
   getTokenFrom,
-  checkBlacklist
+  checkBlacklist,
+  limiter
 };
