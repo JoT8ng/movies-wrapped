@@ -8,6 +8,21 @@ interface QueryData {
   query: string;
 }
 
+// Fetch CSRF token from backend
+const fetchCsrfToken = async () => {
+	try {
+		const response = await axios.get(`${config.BACKEND_URL}/csrf`, {
+			headers: {
+				'x-api-key': config.API_KEY,
+			},
+		})
+		return response.data.csrfToken
+	} catch (error) {
+		console.error('Failed to fetch CSRF token:', error)
+		throw new Error('CSRF token fetch failed')
+	}
+}
+
 const getTrendingMovies = () => {
 	const request = axios.get<TrendingResultsMovie>(`${config.BACKEND_URL}/tmdb/trending/movies`, {
 		headers: {
@@ -32,10 +47,13 @@ const getTrendingTV = () => {
 	})
 }
 
-const getSearchMovies = (queryData: QueryData): Promise<Search<MovieResult>> => {
+const getSearchMovies = async (queryData: QueryData): Promise<Search<MovieResult>> => {
+	const csrfToken = await fetchCsrfToken()
+
 	const request = axios.post<Search<MovieResult>>(`${config.BACKEND_URL}/tmdb/search/movies`, queryData, {
 		headers: {
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 	})
 	return request.then(response => {
@@ -44,10 +62,13 @@ const getSearchMovies = (queryData: QueryData): Promise<Search<MovieResult>> => 
 	})
 }
 
-const getSearchShows = (queryData: QueryData): Promise<Search<TVResult>> => {
+const getSearchShows = async (queryData: QueryData): Promise<Search<TVResult>> => {
+	const csrfToken = await fetchCsrfToken()
+
 	const request = axios.post<Search<TVResult>>(`${config.BACKEND_URL}/tmdb/search/tv`, queryData, {
 		headers: {
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 	})
 	return request.then(response => {
@@ -56,10 +77,13 @@ const getSearchShows = (queryData: QueryData): Promise<Search<TVResult>> => {
 	})
 }
 
-const getMovieDetails = (id: QueryData): Promise<MovieDetails> => {
+const getMovieDetails = async (id: QueryData): Promise<MovieDetails> => {
+	const csrfToken = await fetchCsrfToken()
+
 	const request = axios.post<MovieDetails>(`${config.BACKEND_URL}/tmdb/movies`, id, {
 		headers: {
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 	})
 	return request.then(response => {
@@ -68,10 +92,13 @@ const getMovieDetails = (id: QueryData): Promise<MovieDetails> => {
 	})
 }
 
-const getTVDetails = (id: QueryData): Promise<TVDetails> => {
+const getTVDetails = async (id: QueryData): Promise<TVDetails> => {
+	const csrfToken = await fetchCsrfToken()
+
 	const request = axios.post<TVDetails>(`${config.BACKEND_URL}/tmdb/tv`, id, {
 		headers: {
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 	})
 	return request.then(response => {

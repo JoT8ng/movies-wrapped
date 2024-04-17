@@ -2,11 +2,29 @@ import axios from 'axios'
 import config from '../utils/config'
 import { DeleteEntry, UpdateEntry, WatchlistType } from '../types/watchlist'
 
-const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[]> => {
+// Fetch CSRF token from backend
+const fetchCsrfToken = async () => {
+	try {
+		const response = await axios.get(`${config.BACKEND_URL}/csrf`, {
+			headers: {
+				'x-api-key': config.API_KEY,
+			},
+		})
+		return response.data.csrfToken
+	} catch (error) {
+		console.error('Failed to fetch CSRF token:', error)
+		throw new Error('CSRF token fetch failed')
+	}
+}
+
+const getUserWatchlist = async (token: string, userID: string): Promise<WatchlistType[]> => {
+	const csrfToken = await fetchCsrfToken()
+
 	const header = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 	}
 
@@ -19,33 +37,42 @@ const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[
 	})
 }
 
-const addWatchlist = (token: string, data: WatchlistType) => {
+const addWatchlist = async (token: string, data: WatchlistType) => {
+	const csrfToken = await fetchCsrfToken()
+
 	const header = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 	}
 
 	axios.post(`${config.BACKEND_URL}/add`, data, header)
 }
 
-const updateWatchlist = (token: string, data: UpdateEntry) => {
+const updateWatchlist = async (token: string, data: UpdateEntry) => {
+	const csrfToken = await fetchCsrfToken()
+
 	const header = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 	}
 
 	axios.put(`${config.BACKEND_URL}/update`, data, header)
 }
 
-const deleteWatchlist = (token: string, data: DeleteEntry) => {
+const deleteWatchlist = async (token: string, data: DeleteEntry) => {
+	const csrfToken = await fetchCsrfToken()
+
 	const deleteRequest = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 			'x-api-key': config.API_KEY,
+			'X-CSRF-Token': csrfToken,
 		},
 		data: data
 	}

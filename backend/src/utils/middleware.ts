@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import config from '../utils/config';
 import blacklist from '../models/blacklist';
 import { rateLimit } from 'express-rate-limit';
+import { doubleCsrf } from 'csrf-csrf';
 
 interface JwtPayload {
   id: string
@@ -97,6 +98,20 @@ const authenticateApiKey = (request: Request, response: Response, next: NextFunc
 	next();
 };
 
+const { generateToken, doubleCsrfProtection } = doubleCsrf({
+	getSecret: () => {
+		if (config.CSRF_SECRET === undefined) {
+			throw new Error('CSRF_SECRET is not defined in the configuration');
+		}
+		return config.CSRF_SECRET;
+	},
+	cookieName: '__x-csrf-movies',
+	cookieOptions: {
+		secure: true,
+		sameSite: 'lax',
+	},
+});
+
 export default {
 	requestLogger,
 	unknownEndpoint,
@@ -105,5 +120,7 @@ export default {
 	getTokenFrom,
 	checkBlacklist,
 	limiter,
-	authenticateApiKey
+	authenticateApiKey,
+	generateToken,
+	doubleCsrfProtection
 };

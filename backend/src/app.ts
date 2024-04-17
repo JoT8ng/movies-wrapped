@@ -12,6 +12,8 @@ import middleware from './utils/middleware';
 import mongoose from 'mongoose';
 import loginRouter from './routes/loginRouter';
 import logoutRouter from './routes/logoutRouter';
+import cookieParser from 'cookie-parser';
+import csrfRouter from './routes/csrfRouter';
 
 mongoose.set('strictQuery', false);
 
@@ -28,7 +30,7 @@ mongoose.connect(config.MONGODB_URI as string)
 const corsOptions = {
 	origin: config.FRONTEND_URL,
 	methods: ['GET', 'POST', 'PUT', 'DELETE'],
-	allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
+	allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key', 'X-CSRF-Token'],
 	credentials: true,
 };
 
@@ -36,9 +38,15 @@ app.use(express.json());
 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
 app.use(cors(corsOptions));
 app.use(express.static('dist'));
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+app.use(cookieParser());
 app.use(middleware.requestLogger);
 app.use(middleware.limiter);
 app.use(middleware.authenticateApiKey);
+
+// CSRF protection
+app.use('/', csrfRouter);
+app.use(middleware.doubleCsrfProtection);
 
 app.use('/tmdb', tmdbRouter);
 app.use('/', watchlistRouter);
