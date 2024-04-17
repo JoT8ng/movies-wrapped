@@ -33,11 +33,11 @@ loginRouter.post('/', async (request, response) => {
 		});
 	}
   
-	// token expires in 60*60 seconds, that is, in one hour
+	// token expires in in 15 minutes (900 seconds)
 	const token = jwt.sign(
 		userForToken, 
 		config.SECRET,
-		{ expiresIn: 60*60 }
+		{ expiresIn: 900 }
 	);
   
 	response
