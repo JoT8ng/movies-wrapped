@@ -48,6 +48,12 @@ jobs:
       # Cypress e2e tests
 
       # Deployment pipeline
+      - name: Deploy Frontend
+        if: ${{ github.event_name == 'push' }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_FRONTEND_SERVICE_ID }}?key=${{ secrets.RENDER_FRONTEND_API_KEY }}
+      - name: Deploy Backend
+        if: ${{ github.event_name == 'push' }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_BACKEND_SERVICE_ID }}?key=${{ secrets.RENDER_BACKEND_API_KEY }}
 
   tag_release:
     needs: [simple_deployment_pipeline]
