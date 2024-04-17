@@ -40,8 +40,8 @@ loginRouter.post('/', (request, response) => __awaiter(void 0, void 0, void 0, f
             error: 'Internal server error: SECRET is not defined'
         });
     }
-    // token expires in 60*60 seconds, that is, in one hour
-    const token = jsonwebtoken_1.default.sign(userForToken, config_1.default.SECRET, { expiresIn: 60 * 60 });
+    // token expires in in 15 minutes (900 seconds)
+    const token = jsonwebtoken_1.default.sign(userForToken, config_1.default.SECRET, { expiresIn: 900 });
     response
         .status(200)
         .send({ token, username: user.username, user_id: user._id });
