@@ -37,7 +37,6 @@ app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.static('dist'));
 app.use(middleware_1.default.requestLogger);
 app.use(middleware_1.default.limiter);
-app.use(middleware_1.default.authenticateApiKey);
 app.use('/tmdb', tmdbRouter_1.default);
 app.use('/', watchlistRouter_1.default);
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument

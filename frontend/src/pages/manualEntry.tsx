@@ -122,7 +122,7 @@ const Manual = () => {
 	return (
 		<div className="bg-base-green min-h-screen">
 			<div className='flex justify-between py-5 px-10 gap-8'>
-				<a href='/'>
+				<a href='/dashboard'>
 					<img src={logo} alt='movies wrapped logo' className='object-contain max-h-10 max-w-15 transition duration-300 hover:filter hover:drop-shadow-lg' />
 				</a>
 				<a href="/dashboard">
