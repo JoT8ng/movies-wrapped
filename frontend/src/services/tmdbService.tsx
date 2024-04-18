@@ -9,11 +9,7 @@ interface QueryData {
 }
 
 const getTrendingMovies = () => {
-	const request = axios.get<TrendingResultsMovie>(`${config.BACKEND_URL}/tmdb/trending/movies`, {
-		headers: {
-			'x-api-key': config.API_KEY,
-		},
-	})
+	const request = axios.get<TrendingResultsMovie>(`${config.BACKEND_URL}/tmdb/trending/movies`)
 	return request.then(response => {
 		console.log('received trending movies data from backend')
 		return response.data
@@ -21,11 +17,7 @@ const getTrendingMovies = () => {
 }
 
 const getTrendingTV = () => {
-	const request = axios.get<TrendingResultsTV>(`${config.BACKEND_URL}/tmdb/trending/tv`, {
-		headers: {
-			'x-api-key': config.API_KEY,
-		},
-	})
+	const request = axios.get<TrendingResultsTV>(`${config.BACKEND_URL}/tmdb/trending/tv`)
 	return request.then(response => {
 		console.log('received trending tv data from backend')
 		return response.data
@@ -33,11 +25,7 @@ const getTrendingTV = () => {
 }
 
 const getSearchMovies = (queryData: QueryData): Promise<Search<MovieResult>> => {
-	const request = axios.post<Search<MovieResult>>(`${config.BACKEND_URL}/tmdb/search/movies`, queryData, {
-		headers: {
-			'x-api-key': config.API_KEY,
-		},
-	})
+	const request = axios.post<Search<MovieResult>>(`${config.BACKEND_URL}/tmdb/search/movies`, queryData)
 	return request.then(response => {
 		console.log('received search movie data from backend')
 		return response.data
@@ -45,11 +33,7 @@ const getSearchMovies = (queryData: QueryData): Promise<Search<MovieResult>> => 
 }
 
 const getSearchShows = (queryData: QueryData): Promise<Search<TVResult>> => {
-	const request = axios.post<Search<TVResult>>(`${config.BACKEND_URL}/tmdb/search/tv`, queryData, {
-		headers: {
-			'x-api-key': config.API_KEY,
-		},
-	})
+	const request = axios.post<Search<TVResult>>(`${config.BACKEND_URL}/tmdb/search/tv`, queryData)
 	return request.then(response => {
 		console.log('received search TV shows data from backend')
 		return response.data
@@ -57,11 +41,7 @@ const getSearchShows = (queryData: QueryData): Promise<Search<TVResult>> => {
 }
 
 const getMovieDetails = (id: QueryData): Promise<MovieDetails> => {
-	const request = axios.post<MovieDetails>(`${config.BACKEND_URL}/tmdb/movies`, id, {
-		headers: {
-			'x-api-key': config.API_KEY,
-		},
-	})
+	const request = axios.post<MovieDetails>(`${config.BACKEND_URL}/tmdb/movies`, id)
 	return request.then(response => {
 		console.log('received selected movie details from backend')
 		return response.data
@@ -69,11 +49,7 @@ const getMovieDetails = (id: QueryData): Promise<MovieDetails> => {
 }
 
 const getTVDetails = (id: QueryData): Promise<TVDetails> => {
-	const request = axios.post<TVDetails>(`${config.BACKEND_URL}/tmdb/tv`, id, {
-		headers: {
-			'x-api-key': config.API_KEY,
-		},
-	})
+	const request = axios.post<TVDetails>(`${config.BACKEND_URL}/tmdb/tv`, id)
 	return request.then(response => {
 		console.log('received selected movie details from backend')
 		return response.data

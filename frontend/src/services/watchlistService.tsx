@@ -6,7 +6,6 @@ const getUserWatchlist = (token: string, userID: string): Promise<WatchlistType[
 	const header = {
 		headers: {
 			Authorization: `Bearer ${token}`,
-			'x-api-key': config.API_KEY,
 		},
 	}
 
@@ -23,7 +22,6 @@ const addWatchlist = (token: string, data: WatchlistType) => {
 	const header = {
 		headers: {
 			Authorization: `Bearer ${token}`,
-			'x-api-key': config.API_KEY,
 		},
 	}
 
@@ -34,7 +32,6 @@ const updateWatchlist = (token: string, data: UpdateEntry) => {
 	const header = {
 		headers: {
 			Authorization: `Bearer ${token}`,
-			'x-api-key': config.API_KEY,
 		},
 	}
 
@@ -45,7 +42,6 @@ const deleteWatchlist = (token: string, data: DeleteEntry) => {
 	const deleteRequest = {
 		headers: {
 			Authorization: `Bearer ${token}`,
-			'x-api-key': config.API_KEY,
 		},
 		data: data
 	}
