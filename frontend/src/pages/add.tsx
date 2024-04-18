@@ -67,6 +67,7 @@ const Add = () => {
 	const [selectedTVData, setSelectedTVData] = useState<SelectTVData | null>(null)
 	const [movieGenres, setMovieGenres] = useState<Genre[]>([])
 	const [tvGenres, setTVGenres] = useState<Genre[]>([])
+	const [isSelected, setIsSelected] = useState<boolean>(false)
 
 	const navigate = useNavigate()
 
@@ -126,6 +127,8 @@ const Add = () => {
 			setMovieGenres(genres)
 			setSelectedTVData(null)
 			setTVGenres([])
+
+			setIsSelected(!isSelected)
 		} catch (error) {
 			console.error('Error getting movie details:', error)
 			setErrorMessage('TMDB server error. The selection does not have valid data. Refine your search or choose another selection.')
@@ -150,6 +153,8 @@ const Add = () => {
 			setTVGenres(genres)
 			setSelectedMovieData(null)
 			setMovieGenres([])
+
+			setIsSelected(!isSelected)
 		} catch (error) {
 			console.error('Error getting tv details:', error)
 			setErrorMessage('TMDB server error. The selection does not have valid data. Refine your search or choose another selection.')
@@ -221,7 +226,7 @@ const Add = () => {
 				</a>
 			</div>
 			<div className="flex flex-col justify-center items-center px-20">
-				<h1 className="font-sans lg:text-lg py-3 md:text-sm sm:text-xs text-light-green text-center">What did you watch today?</h1>
+				<h1 className="font-sans lg:text-lg py-3 md:text-sm sm:text-xs text-light-green text-center">What did you watch?</h1>
 				<Notification error={errorMessage} message={message} />
 				<Formik
 					validationSchema={searchSchema}
@@ -251,7 +256,7 @@ const Add = () => {
 				<div className="flex flex-col border rounded border-light-green p-5 lg:w-[900px] md:w-96 sm:w-48 h-96 overflow-y-auto scroll-smooth hide-scrollbar">
 					{searchMovie?
 						(searchMovie.results.map(item =>
-							<div key={`Search ${item.original_title}, ${item.release_date}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
+							<div key={`Search ${item.original_title}, ${item.release_date}`} className={`flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded ${selectedMovieData?.id === item.id ? 'border border-pink border-3 bg-white bg-opacity-20' : ''}`}>
 								<div className="flex flex-col justify-start">
 									<img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_title}`} className='px-2 py-2 w-[100px] rounded' />
 									<p className="font-mono text-light-green text-sm px-2">{item.original_title}</p>
@@ -271,7 +276,7 @@ const Add = () => {
 					}
 					{searchTV?
 						(searchTV.results.map(item =>
-							<div key={`Search ${item.original_name}, ${item.first_air_date}`} className="flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded">
+							<div key={`Search ${item.original_name}, ${item.first_air_date}`} className={`flex justify-between py-2 hover:bg-white hover:bg-opacity-20 rounded ${selectedTVData?.id === item.id ? 'border border-pink border-3 bg-white bg-opacity-20' : ''}`}>
 								<div className="flex flex-col justify-start">
 									<img src={`https://image.tmdb.org/t/p/w300/${item.poster_path}`} alt={`Trending ${item.original_name}`} className='px-2 py-2 w-[100px] rounded' />
 									<p className="font-mono text-light-green text-sm px-2">{item.original_name}</p>
