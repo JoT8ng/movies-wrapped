@@ -75,7 +75,7 @@ const Login = () => {
 						<TextInput
 							label='Password'
 							name='password'
-							type='text'
+							type='password'
 							placeholder='password'
 							width='md:w-80 sm:w-48'
 						/>
