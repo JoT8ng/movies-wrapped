@@ -37,7 +37,7 @@ const Dashboard = () => {
 			<div className="flex flex-col p-5 justify-between rounded bg-base-green xl:w-1/5 lg:w-1/5 md:w-1/5 sm:w-full">
 				<div className='flex flex-col gap-3'>
 					<div className='flex flex-col gap-8'>
-						<a href='/'>
+						<a href='/dashboard'>
 							<img src={logo} alt='movies wrapped logo' className='object-contain max-h-10 max-w-15 transition duration-300 hover:filter hover:drop-shadow-lg' />
 						</a>
 						<h1 className="font-sans lg:text-lg py-3 md:text-sm sm:text-xs text-light-green">

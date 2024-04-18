@@ -9,8 +9,6 @@ const SECRET = process.env.SECRET;
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
-const API_KEY = process.env.API_KEY;
-
 const MONGODB_URI = process.env.NODE_ENV === 'test'
 	? process.env.TEST_MONGODB_URI
 	: process.env.MONGODB_URI;
@@ -24,6 +22,5 @@ export default {
 	SECRET,
 	TMDB_API_KEY,
 	MONGODB_URI,
-	API_KEY,
 	FRONTEND_URL
 };
