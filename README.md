@@ -21,6 +21,11 @@ A non-commercial app that allows users to keep track of movies and shows they wa
 
 ## Features To Be Added:
 * Generate yearly and monthly watchlist summaries and share them with friends and other users
+* Filter user watchlist by year watched
+* Filter user watchlist by genres
+* Search user watchlist
+* View media information in Trending component
+* Automatically add media in Trending component to watchlist
 
 ## This web app uses:
 * React
