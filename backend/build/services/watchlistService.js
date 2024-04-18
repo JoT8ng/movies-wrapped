@@ -82,9 +82,13 @@ const updateEntry = (id, entry, tokenid) => __awaiter(void 0, void 0, void 0, fu
     if (entryToUpdate.user.toString() !== user._id.toString()) {
         throw new Error('only users to wrote watchlist entry can update entry');
     }
-    if (!entry.user_rating || !entry.comments || !entry.date_watched) {
+    if (entry.user_rating === 0) {
         entry.user_rating = entryToUpdate.user_rating;
+    }
+    if (entry.comments === 'No comments added') {
         entry.comments = entryToUpdate.comments;
+    }
+    if (!entry.date_watched) {
         entry.date_watched = entryToUpdate.date_watched;
     }
     const updatedEntry = {
