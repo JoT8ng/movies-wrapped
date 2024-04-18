@@ -76,7 +76,7 @@ const RecentlyWatched = () => {
 		<div>
 			<div className='flex justify-start gap-9 pb-5'>
 				<a href='/watchlist'>
-					<h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green'>Recently Watched</h1>
+					<h1 className='font-sans lg:text-lg md:text-sm sm:text-xs text-light-green hover:text-pink'>Recently Watched</h1>
 				</a>
 				<div className='flex w-64 rounded-full border border-pink'>
 					<div className='w-1/2'>

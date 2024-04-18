@@ -38,12 +38,6 @@ const Modal: React.FC<ModalProps> = ({ modalData }) => {
 
 	const token: string | null = middleware.getToken()
 
-	const date = new Date()
-
-	const day = date.getDate()
-	const month = date.getMonth() + 1
-	const year = date.getFullYear()
-
 	const handleUpdate = async (values: Update) => {
 		try {
 			const dataSubmit: UpdateEntry = {
@@ -136,7 +130,7 @@ const Modal: React.FC<ModalProps> = ({ modalData }) => {
 					<Notification error={errorMessage} message={message} />
 					<Formik
 						validationSchema={editSchema}
-						initialValues={{ user_rating: '0', comments: 'No comments added', date_watched: `${year}-${month}-${day}` }}
+						initialValues={{ user_rating: '0', comments: 'No comments added', date_watched: '' }}
 						onSubmit={(values) => {
 							const userRatingNumber = parseFloat(values.user_rating)
 

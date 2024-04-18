@@ -339,13 +339,14 @@ const Add = () => {
 								width='lg:w-[900px] md:w-96 sm:w-48'
 							/>
 							<div className="flex gap-3 justify-center items-center pt-10 p-5">
-								<button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink md:w-96 sm:w-48 py-2 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
+								<button type="submit" className="bg-pink hover:bg-base-green hover:border hover:border-pink md:w-96 sm:w-48 py-2 px-3 rounded font-roboto-bold font-bold lg:text-md text-light-green md:text-sm sm:text-xs">
                                     Save
 								</button>
 							</div>
 						</Form>
 					)}
 				</Formik>
+				<Notification error={errorMessage} message={message} />
 			</div>
 		</div>
 	)
