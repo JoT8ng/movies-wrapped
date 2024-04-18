@@ -8,7 +8,7 @@ const watchlistSchema: Schema<WatchlistMongo> = new mongoose.Schema({
 	media_type: { type: String, required: true },
 	title: { type: String, required: true },
 	user_rating: { type: Number, required: true, default: 0 },
-	comments: { type: String, required: true, default: '' },
+	comments: { type: String, required: true, default: 'No comments added' },
 	date_watched: { type: String, required: true, default: '' },
 	release_date: { type: String, required: true },
 	genres: [{ id: Number, name: String }],
