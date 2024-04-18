@@ -9,7 +9,6 @@ dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../.env.lo
 const PORT = process.env.PORT;
 const SECRET = process.env.SECRET;
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
-const API_KEY = process.env.API_KEY;
 const MONGODB_URI = process.env.NODE_ENV === 'test'
     ? process.env.TEST_MONGODB_URI
     : process.env.MONGODB_URI;
@@ -21,6 +20,5 @@ exports.default = {
     SECRET,
     TMDB_API_KEY,
     MONGODB_URI,
-    API_KEY,
     FRONTEND_URL
 };
