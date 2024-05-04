@@ -8,6 +8,7 @@ import { loginSuccess } from '../reducers/AuthReducer'
 import { useNavigate } from 'react-router-dom'
 import Notification from '../components/Notification'
 import { useState } from 'react'
+import reel from '../assets/SpinLogo-01.png'
 
 
 const loginSchema = Yup.object().shape({
@@ -22,12 +23,14 @@ const loginSchema = Yup.object().shape({
 const Login = () => {
 	const [errorMessage, setErrorMessage] = useState<string | null>(null)
 	const [message, setMessage] = useState<boolean>(false)
+	const [loading, setLoading] = useState<boolean>(false)
 
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
 
 	const handleLogin = async (values: { username: string, password: string }): Promise<void> => {
 		try {
+			setLoading(true)
 			const data = await userService.loginService(values)
 
 			window.localStorage.setItem(
@@ -46,6 +49,8 @@ const Login = () => {
 				setErrorMessage(null)
 			}, 10000)
 			setMessage(false)
+		} finally {
+			setLoading(false)
 		}
 	}
 
@@ -86,6 +91,12 @@ const Login = () => {
 						</div>
 					</Form>
 				</Formik>
+				{loading && (
+					<div className="flex items-center gap-3">
+						<img src={reel} alt='movies wrapped spin logo' className='object-contain animate-spin-slow max-h-5 transition duration-300' />
+						<p className="font-sans text-sm text-light-green">Logging in, please wait...</p>
+					</div>
+				)}
 				<div className="flex gap-3 justify-center items-center p-3">
 					<p className="font-sans text-sm text-light-green">Don't have an account?</p>
 					<a href='/signup' className="font-sans font-bold text-sm text-light-green hover:text-pink">Sign up</a>
