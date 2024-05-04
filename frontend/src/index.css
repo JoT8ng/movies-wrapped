@@ -5,20 +5,28 @@
 
 /* Hide scrollbar for WebKit-based browsers */
 .hide-scrollbar::-webkit-scrollbar {
-	display: none;
+	width: 8px;
+}
+
+/* Handle */
+.hide-scrollbar::-webkit-scrollbar-thumb {
+	background-color: #001212;
+	border-radius: 4px;
+}
+
+/* Track */
+.hide-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
 }
 
 /* Hide scrollbar for Firefox */
 .hide-scrollbar {
-	scrollbar-width: none; /* Firefox 64+ */
+	scrollbar-width: thin; /* Firefox 64+ */
 }
 
-.hide-scrollbar::-webkit-scrollbar-track {
-	background-color: transparent; /* WebKit-based browsers */
-}
-
-.hide-scrollbar::-webkit-scrollbar-thumb {
-	display: none; /* WebKit-based browsers */
+/* Handle */
+.hide-scrollbar {
+	scrollbar-color: #001212 transparent; /* Firefox 64+ */
 }
 
 .theme-gradient {
