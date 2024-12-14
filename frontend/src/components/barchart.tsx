@@ -35,8 +35,8 @@ const options: ChartProps<'bar'>['options'] = {
 
 const Barchart = () => {
 	const [userWatchlistData, setUserWatchlistData] = useState<WatchlistType[]>([])
-	const [movies2019, setMovies2019] = useState<WatchlistType[]>([])
-	const [tv2019, setTv2019] = useState<WatchlistType[]>([])
+	const [movies2025, setMovies2025] = useState<WatchlistType[]>([])
+	const [tv2025, setTv2025] = useState<WatchlistType[]>([])
 	const [movies2020, setMovies2020] = useState<WatchlistType[]>([])
 	const [tv2020, setTv2020] = useState<WatchlistType[]>([])
 	const [movies2021, setMovies2021] = useState<WatchlistType[]>([])
@@ -67,17 +67,17 @@ const Barchart = () => {
 	}, [])
 
 	useEffect(() => {
-		// Filter by year 2019
-		const m2019 = userWatchlistData.filter(item => item.media_type === 'movie' && new Date(item.date_watched).getFullYear() === 2019)
-		const tv2019 = userWatchlistData.filter(item => item.media_type === 'tv' && new Date(item.date_watched).getFullYear() === 2019)
-		setMovies2019(m2019)
-		setTv2019(tv2019)
-
 		// Filter by year 2020
 		const m2020 = userWatchlistData.filter(item => item.media_type === 'movie' && new Date(item.date_watched).getFullYear() === 2020)
 		const tv2020 = userWatchlistData.filter(item => item.media_type === 'tv' && new Date(item.date_watched).getFullYear() === 2020)
 		setMovies2020(m2020)
 		setTv2020(tv2020)
+
+		// Filter by year 2025
+		const m2025 = userWatchlistData.filter(item => item.media_type === 'movie' && new Date(item.date_watched).getFullYear() === 2025)
+		const tv2025 = userWatchlistData.filter(item => item.media_type === 'tv' && new Date(item.date_watched).getFullYear() === 2025)
+		setMovies2025(m2025)
+		setTv2025(tv2025)
 
 		// Filter by year 2021
 		const m2021 = userWatchlistData.filter(item => item.media_type === 'movie' && new Date(item.date_watched).getFullYear() === 2021)
@@ -105,7 +105,7 @@ const Barchart = () => {
 	}, [userWatchlistData])
 
 	const movieLength = [
-		movies2019.length,
+		movies2025.length,
 		movies2020.length,
 		movies2021.length,
 		movies2022.length,
@@ -114,7 +114,7 @@ const Barchart = () => {
 	]
 
 	const tvLength = [
-		tv2019.length,
+		tv2025.length,
 		tv2020.length,
 		tv2021.length,
 		tv2022.length,
@@ -123,7 +123,7 @@ const Barchart = () => {
 	]
 
 	const newChartData = {
-		labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+		labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
 		datasets: [
 			{
 				label: 'Movies',
