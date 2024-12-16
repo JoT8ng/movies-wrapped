@@ -73,12 +73,6 @@ const Barchart = () => {
 		setMovies2020(m2020)
 		setTv2020(tv2020)
 
-		// Filter by year 2025
-		const m2025 = userWatchlistData.filter(item => item.media_type === 'movie' && new Date(item.date_watched).getFullYear() === 2025)
-		const tv2025 = userWatchlistData.filter(item => item.media_type === 'tv' && new Date(item.date_watched).getFullYear() === 2025)
-		setMovies2025(m2025)
-		setTv2025(tv2025)
-
 		// Filter by year 2021
 		const m2021 = userWatchlistData.filter(item => item.media_type === 'movie' && new Date(item.date_watched).getFullYear() === 2021)
 		const tv2021 = userWatchlistData.filter(item => item.media_type === 'tv' && new Date(item.date_watched).getFullYear() === 2021)
@@ -102,24 +96,30 @@ const Barchart = () => {
 		const tv2024 = userWatchlistData.filter(item => item.media_type === 'tv' && new Date(item.date_watched).getFullYear() === 2024)
 		setMovies2024(m2024)
 		setTv2024(tv2024)
+
+		// Filter by year 2025
+		const m2025 = userWatchlistData.filter(item => item.media_type === 'movie' && new Date(item.date_watched).getFullYear() === 2025)
+		const tv2025 = userWatchlistData.filter(item => item.media_type === 'tv' && new Date(item.date_watched).getFullYear() === 2025)
+		setMovies2025(m2025)
+		setTv2025(tv2025)
 	}, [userWatchlistData])
 
 	const movieLength = [
-		movies2025.length,
 		movies2020.length,
 		movies2021.length,
 		movies2022.length,
 		movies2023.length,
 		movies2024.length,
+		movies2025.length,
 	]
 
 	const tvLength = [
-		tv2025.length,
 		tv2020.length,
 		tv2021.length,
 		tv2022.length,
 		tv2023.length,
 		tv2024.length,
+		tv2025.length,
 	]
 
 	const newChartData = {
