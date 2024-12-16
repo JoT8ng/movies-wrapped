@@ -1,6 +1,6 @@
 # movies-wrapped
 
-_Web App Last update 18/04/2024_
+_Web App Last update 16/12/2024_
 
 ![Homepage](images/movies-preview.png)
 ![Homepage2](images/movies-preview2.png)
